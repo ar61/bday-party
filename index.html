@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🕷️ AVENGERS ASSEMBLE! Birthday Party RSVP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    body {
+        font-family: 'Quicksand', sans-serif;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        min-height: 100vh;
+        padding: 20px;
+        position: relative;
+        overflow-x: hidden;
+    }
+
+    /* Animated power energy decorations */
+    .balloon {
+        position: fixed;
+        bottom: -100px;
+        font-size: 40px;
+        opacity: 0.7;
+        animation: float-up 15s infinite ease-in;
+        pointer-events: none;
+    }
+
+    .balloon:nth-child(1) { left: 10%; animation-delay: 0s; }
+    .balloon:nth-child(2) { left: 20%; animation-delay: 2s; }
+    .balloon:nth-child(3) { left: 30%; animation-delay: 4s; }
+    .balloon:nth-child(4) { left: 40%; animation-delay: 1s; }
+    .balloon:nth-child(5) { left: 50%; animation-delay: 3s; }
+    .balloon:nth-child(6) { left: 60%; animation-delay: 5s; }
+    .balloon:nth-child(7) { left: 70%; animation-delay: 2.5s; }
+    .balloon:nth-child(8) { left: 80%; animation-delay: 4.5s; }
+    .balloon:nth-child(9) { left: 90%; animation-delay: 1.5s; }
+
+    @keyframes float-up {
+        0% {
+            bottom: -100px;
+            opacity: 0;
+            transform: translateX(0);
+        }
+        10% {
+            opacity: 0.7;
+        }
+        90% {
+            opacity: 0.7;
+        }
+        100% {
+            bottom: 100vh;
+            opacity: 0;
+            transform: translateX(30px);
+        }
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
+        border-radius: 30px;
+        padding: 40px;
+        box-shadow: 0 20px 60px rgba(255, 0, 0, 0.3), inset 0 0 40px rgba(255, 0, 0, 0.05);
+        border: 3px solid #DC143C;
+        position: relative;
+        z-index: 10;
+        animation: slide-down 0.6s ease-out;
+    }
+
+    @keyframes slide-down {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .emoji-burst {
+        font-size: 60px;
+        margin-bottom: 15px;
+        display: inline-block;
+        animation: bounce 0.6s ease-out;
+    }
+
+    @keyframes bounce {
+        0% { transform: scale(0) rotate(-45deg); }
+        50% { transform: scale(1.2); }
+        100% { transform: scale(1) rotate(0); }
+    }
+
+    h1 {
+        font-family: 'Fredoka', sans-serif;
+        font-size: 42px;
+        color: #FF0000;
+        margin-bottom: 10px;
+        text-shadow: 0 0 20px rgba(255, 0, 0, 0.6), 2px 2px 4px rgba(0, 0, 0, 0.8);
+        letter-spacing: 1px;
+        font-weight: 700;
+    }
+
+    .subtitle {
+        color: #FFD700;
+        font-size: 16px;
+        margin-bottom: 5px;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    }
+
+    .party-details {
+        background: linear-gradient(135deg, #1a2a3a 0%, #243447 100%);
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 30px;
+        border: 3px solid #DC143C;
+        box-shadow: inset 0 0 20px rgba(220, 20, 60, 0.1);
+    }
+
+    .detail-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+        font-size: 16px;
+    }
+
+    .detail-row:last-child {
+        margin-bottom: 0;
+    }
+
+    .detail-emoji {
+        font-size: 24px;
+        margin-right: 12px;
+        min-width: 30px;
+    }
+
+    .detail-text {
+        color: #E8E8E8;
+    }
+
+    .detail-text strong {
+        color: #FFD700;
+    }
+
+    .form-section {
+        margin-bottom: 25px;
+    }
+
+    label {
+        display: block;
+        font-family: 'Fredoka', sans-serif;
+        font-weight: 600;
+        color: #FF0000;
+        margin-bottom: 10px;
+        font-size: 16px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="number"],
+    select,
+    textarea {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #DC143C;
+        border-radius: 15px;
+        font-family: 'Quicksand', sans-serif;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        background: #1a2a3a;
+        color: #E8E8E8;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+        color: #888;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+        outline: none;
+        border-color: #FF0000;
+        background: #243447;
+        box-shadow: 0 0 0 4px rgba(255, 0, 0, 0.2);
+    }
+
+    .radio-group,
+    .checkbox-group {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+    }
+
+    .radio-option,
+    .checkbox-option {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+        cursor: pointer;
+        width: 20px;
+        height: 20px;
+        accent-color: #DC143C;
+    }
+
+    .radio-option label,
+    .checkbox-option label {
+        margin: 0;
+        font-weight: normal;
+        color: #E8E8E8;
+        cursor: pointer;
+    }
+
+    .button-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 30px;
+    }
+
+    button {
+        flex: 1;
+        padding: 15px 25px;
+        border: none;
+        border-radius: 15px;
+        font-family: 'Fredoka', sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .btn-submit {
+        background: linear-gradient(135deg, #DC143C 0%, #FF0000 100%);
+        color: white;
+        box-shadow: 0 8px 20px rgba(220, 20, 60, 0.5);
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 30px rgba(255, 0, 0, 0.6), 0 0 20px rgba(255, 0, 0, 0.3);
+    }
+
+    .btn-submit:active {
+        transform: translateY(-1px);
+    }
+
+    .btn-reset {
+        background: #E8E8E8;
+        color: #666;
+    }
+
+    .btn-reset:hover {
+        background: #D0D0D0;
+    }
+
+    .success-message {
+        display: none;
+        background: linear-gradient(135deg, #1a3a1a 0%, #2d5a2d 100%);
+        border-left: 6px solid #FFD700;
+        padding: 20px;
+        border-radius: 15px;
+        margin-top: 20px;
+        text-align: center;
+        animation: slide-in 0.4s ease-out;
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+    }
+
+    .success-message h3 {
+        color: #FFD700;
+        font-size: 20px;
+        margin-bottom: 5px;
+    }
+
+    .success-message p {
+        color: #B8E6B8;
+        font-size: 14px;
+    }
+
+    .success-message.show {
+        display: block;
+    }
+
+    @keyframes slide-in {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .rsvp-list {
+        background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
+        border-radius: 15px;
+        padding: 20px;
+        margin-top: 30px;
+        max-height: 300px;
+        overflow-y: auto;
+        border: 2px solid #DC143C;
+    }
+
+    .rsvp-list h3 {
+        color: #FF0000;
+        font-family: 'Fredoka', sans-serif;
+        margin-bottom: 15px;
+        font-size: 18px;
+    }
+
+    .rsvp-entry {
+        background: #1a2a3a;
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        border-left: 4px solid #DC143C;
+        font-size: 14px;
+    }
+
+    .rsvp-entry:last-child {
+        margin-bottom: 0;
+    }
+
+    .rsvp-name {
+        font-weight: 600;
+        color: #FFD700;
+    }
+
+    .rsvp-status {
+        font-size: 12px;
+        color: #B0B0B0;
+        margin-top: 3px;
+    }
+
+    @media (max-width: 600px) {
+        .container {
+            padding: 25px;
+            border-radius: 20px;
+        }
+
+        h1 {
+            font-size: 32px;
+        }
+
+        .emoji-burst {
+            font-size: 50px;
+        }
+
+        .button-group {
+            flex-direction: column;
+        }
+
+        button {
+            width: 100%;
+        }
+    }
+
+    /* Edit toggle styles */
+    .edit-section {
+        background: linear-gradient(135deg, #1a2a1a 0%, #2d3a2a 100%);
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 25px;
+        border: 2px solid #FFD700;
+        display: none;
+        box-shadow: inset 0 0 20px rgba(255, 215, 0, 0.05);
+    }
+
+    .edit-section.show {
+        display: block;
+    }
+
+    .edit-toggle {
+        background: linear-gradient(135deg, #FFD700 0%, #FFC700 100%);
+        color: #1a1a2e;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-size: 14px;
+        margin-bottom: 20px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+    }
+
+    .edit-toggle:hover {
+        background: linear-gradient(135deg, #FFC700 0%, #FFB700 100%);
+        box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+        transform: translateY(-2px);
+    }
+
+    .edit-input {
+        width: 100%;
+        padding: 10px;
+        border: 2px solid #FFD700;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        font-family: 'Quicksand', sans-serif;
+        font-size: 14px;
+        background: #1a2a3a;
+        color: #E8E8E8;
+    }
+
+    .edit-input:focus {
+        outline: none;
+        border-color: #FF0000;
+        box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
+    }
+
+    .edit-label {
+        font-weight: 600;
+        color: #FFD700;
+        margin-bottom: 5px;
+        display: block;
+        font-size: 13px;
+    }
+</style>
+```
+
+</head>
+<body>
+    <!-- Floating superhero power symbols -->
+    <div class="balloon">🕷️</div>
+    <div class="balloon">⚡</div>
+    <div class="balloon">🦸</div>
+    <div class="balloon">⭐</div>
+    <div class="balloon">💥</div>
+    <div class="balloon">🕸️</div>
+    <div class="balloon">🔴</div>
+    <div class="balloon">⚔️</div>
+    <div class="balloon">🌟</div>
+
+```
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <div class="emoji-burst">🕷️</div>
+        <h1>AVENGERS ASSEMBLE!</h1>
+        <p class="subtitle">You're Invited to an Epic Superhero Celebration!</p>
+    </div>
+
+    <!-- Party Details -->
+    <div class="party-details">
+        <div class="detail-row">
+            <span class="detail-emoji">🦸</span>
+            <span class="detail-text"><strong id="partyChildName">Nirvan</strong>'s Superhero Birthday!</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-emoji">🎂</span>
+            <span class="detail-text">Turning <strong id="partyAge">5</strong> years old!</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-emoji">📅</span>
+            <span class="detail-text" id="partyDate">Saturday, April 25th</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-emoji">⏰</span>
+            <span class="detail-text" id="partyTime">12:15 PM - 3:00 PM</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-emoji">📍</span>
+            <span class="detail-text" id="partyLocation">iPlay America, 110 Schanck Rd, Freehold, NJ 07728</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-emoji">⚡</span>
+            <span class="detail-text" id="partyActivity">Spider-Man & Avengers Adventure!</span>
+        </div>
+    </div>
+
+    <!-- RSVP Form -->
+    <form id="rsvpForm">
+        <!-- Guest Name -->
+        <div class="form-section">
+            <label for="guestName">Child's Name *</label>
+            <input type="text" id="guestName" name="guestName" placeholder="Enter child's name" required>
+        </div>
+
+        <!-- Parent/Guardian Name -->
+        <div class="form-section">
+            <label for="parentName">Parent/Guardian Name *</label>
+            <input type="text" id="parentName" name="parentName" placeholder="Your name" required>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="form-section">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" name="email" placeholder="your@email.com" required>
+        </div>
+
+        <div class="form-section">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567">
+        </div>
+
+        <!-- RSVP Status -->
+        <div class="form-section">
+            <label>Will You Be Attending? *</label>
+            <div class="radio-group">
+                <div class="radio-option">
+                    <input type="radio" id="attending-yes" name="attending" value="Yes" required>
+                    <label for="attending-yes">✅ Yes, We'll Be There!</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="attending-no" name="attending" value="No">
+                    <label for="attending-no">❌ Can't Make It</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="attending-maybe" name="attending" value="Maybe">
+                    <label for="attending-maybe">❓ Maybe</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Number of Guests -->
+        <div class="form-section">
+            <label for="guests">How Many Kids Will Be Attending?</label>
+            <input type="number" id="guests" name="guests" min="1" max="10" value="1">
+        </div>
+
+        <!-- Dietary Restrictions -->
+        <div class="form-section">
+            <label>Dietary Restrictions or Allergies</label>
+            <div class="checkbox-group">
+                <div class="checkbox-option">
+                    <input type="checkbox" id="allergy-nuts" name="allergies" value="Nut Allergy">
+                    <label for="allergy-nuts">🥜 Nut Allergy</label>
+                </div>
+                <div class="checkbox-option">
+                    <input type="checkbox" id="allergy-dairy" name="allergies" value="Dairy Free">
+                    <label for="allergy-dairy">🥛 Dairy Free</label>
+                </div>
+                <div class="checkbox-option">
+                    <input type="checkbox" id="allergy-gluten" name="allergies" value="Gluten Free">
+                    <label for="allergy-gluten">🌾 Gluten Free</label>
+                </div>
+                <div class="checkbox-option">
+                    <input type="checkbox" id="allergy-vegan" name="allergies" value="Vegan">
+                    <label for="allergy-vegan">🥬 Vegan</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Special Requests -->
+        <div class="form-section">
+            <label for="comments">Special Requests or Comments</label>
+            <textarea id="comments" name="comments" placeholder="Any special requests or questions?" rows="4"></textarea>
+        </div>
+
+        <!-- Buttons -->
+        <div class="button-group">
+            <button type="submit" class="btn-submit">🎉 Submit RSVP</button>
+            <button type="reset" class="btn-reset">Clear Form</button>
+        </div>
+
+        <!-- Success Message -->
+        <div class="success-message" id="successMessage">
+            <h3>⚡ RSVP LOCKED IN! ⚡</h3>
+            <p>Thanks for your response. See you at the superhero party! 🦸‍♂️</p>
+        </div>
+    </form>
+
+    <!-- RSVP List -->
+    <div class="rsvp-list" id="rsvpList" style="display: none;">
+        <h3>🦸 Team Members Confirmed</h3>
+        <div id="rsvpEntries"></div>
+    </div>
+</div>
+
+<script>
+    // Load data from localStorage
+    function loadData() {
+        const savedPartyDetails = localStorage.getItem('partyDetails');
+        if (savedPartyDetails) {
+            const details = JSON.parse(savedPartyDetails);
+            updatePartyDisplay(details);
+        }
+
+        const savedRsvps = localStorage.getItem('rsvps');
+        if (savedRsvps) {
+            const rsvps = JSON.parse(savedRsvps);
+            displayRsvpList(rsvps);
+        }
+    }
+
+    // Toggle edit mode
+    function toggleEditMode() {
+        const editSection = document.getElementById('editSection');
+        editSection.classList.toggle('show');
+
+        // Load current values into edit form
+        const childName = document.getElementById('partyChildName').textContent;
+        const age = document.getElementById('partyAge').textContent;
+        const date = document.getElementById('partyDate').textContent;
+        const time = document.getElementById('partyTime').textContent;
+        const location = document.getElementById('partyLocation').textContent;
+        const activity = document.getElementById('partyActivity').textContent;
+
+        document.getElementById('editChildName').value = childName;
+        document.getElementById('editAge').value = age;
+        document.getElementById('editDate').value = date;
+        document.getElementById('editTime').value = time;
+        document.getElementById('editLocation').value = location;
+        document.getElementById('editActivity').value = activity;
+    }
+
+    // Save party details
+    function savePartyDetails() {
+        const details = {
+            childName: document.getElementById('editChildName').value || 'Luna',
+            age: document.getElementById('editAge').value || '6',
+            date: document.getElementById('editDate').value || 'Saturday, May 10th',
+            time: document.getElementById('editTime').value || '2:00 PM - 5:00 PM',
+            location: document.getElementById('editLocation').value || 'Community Park, Picnic Area',
+            activity: document.getElementById('editActivity').value || 'Superhero Adventure & Games'
+        };
+
+        localStorage.setItem('partyDetails', JSON.stringify(details));
+        updatePartyDisplay(details);
+        document.getElementById('editSection').classList.remove('show');
+        alert('Party details updated! 🎉');
+    }
+
+    // Update party display
+    function updatePartyDisplay(details) {
+        document.getElementById('partyChildName').textContent = details.childName;
+        document.getElementById('partyAge').textContent = details.age;
+        document.getElementById('partyDate').textContent = details.date;
+        document.getElementById('partyTime').textContent = details.time;
+        document.getElementById('partyLocation').textContent = details.location;
+        document.getElementById('partyActivity').textContent = details.activity;
+    }
+
+    // Handle form submission
+    document.getElementById('rsvpForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = {
+            guestName: document.getElementById('guestName').value,
+            parentName: document.getElementById('parentName').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            attending: document.querySelector('input[name="attending"]:checked').value,
+            guests: document.getElementById('guests').value,
+            allergies: Array.from(document.querySelectorAll('input[name="allergies"]:checked')).map(cb => cb.value),
+            comments: document.getElementById('comments').value,
+            timestamp: new Date().toLocaleString()
+        };
+
+        // Save to localStorage
+        let rsvps = JSON.parse(localStorage.getItem('rsvps')) || [];
+        rsvps.push(formData);
+        localStorage.setItem('rsvps', JSON.stringify(rsvps));
+
+        // Show success message
+        const successMessage = document.getElementById('successMessage');
+        successMessage.classList.add('show');
+
+        // Reset form
+        document.getElementById('rsvpForm').reset();
+
+        // Hide success message after 3 seconds
+        setTimeout(() => {
+            successMessage.classList.remove('show');
+        }, 3000);
+
+        // Update RSVP list
+        displayRsvpList(rsvps);
+    });
+
+    // Display RSVP list
+    function displayRsvpList(rsvps) {
+        const rsvpList = document.getElementById('rsvpList');
+        const entries = document.getElementById('rsvpEntries');
+
+        if (rsvps.length > 0) {
+            rsvpList.style.display = 'block';
+            entries.innerHTML = rsvps.map((rsvp, index) => `
+                <div class="rsvp-entry">
+                    <div class="rsvp-name">${rsvp.guestName}</div>
+                    <div class="rsvp-status">
+                        Status: <strong>${rsvp.attending}</strong> | 
+                        Guests: <strong>${rsvp.guests}</strong>
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            rsvpList.style.display = 'none';
+        }
+    }
+
+    // Load data on page load
+    window.addEventListener('load', loadData);
+</script>
+```
+
+</body>
+</html>
