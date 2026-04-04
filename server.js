@@ -51,17 +51,15 @@ submittedAt: new Date().toISOString()
                 from: process.env.GMAIL_USER,
                 to: req.body.email,
                 subject: '🦸 RSVP Confirmed - Superhero Birthday Party!',
-                html: `
-                    <h2>Your RSVP is Confirmed! 🎉</h2>
-                    <p>Hi ${req.body.parentName},</p>
-                    <p>Thank you for your RSVP! We've received your response:</p>
-                    <ul>
-                        <li><strong>Child's Name:</strong> ${req.body.guestName}</li>
-                        <li><strong>Attending:</strong> ${req.body.attending}</li>
-                        <li><strong>Number of Guests:</strong> ${req.body.guests}</li>
-                    </ul>
-                    <p>We can't wait to celebrate with you! 🦸‍♂️</p>
-                `
+                html: `<h2>Your RSVP is Confirmed! 🎉</h2>` +
+                      `<p>Hi ${req.body.parentName || 'Parent'},</p>` +
+                      `<p>Thank you for your RSVP! We've received your response:</p>` +
+                      `<ul>` +
+                      `<li><strong>Child's Name:</strong> ${req.body.guestName}</li>` +
+                      `<li><strong>Attending:</strong> ${req.body.attending}</li>` +
+                      `<li><strong>Number of Guests:</strong> ${req.body.guests}</li>` +
+                      `</ul>` +
+                      `<p>We can't wait to celebrate with you! 🦸‍♂️</p>`
             });
         } catch (emailErr) {
             console.log('Email not sent (check credentials):', emailErr.message);
