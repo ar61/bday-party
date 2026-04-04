@@ -148,7 +148,7 @@ app.post('/api/rsvp', async (req, res) => {
 });
 
 // GET: Retrieve all RSVPs
-app.get('/api/rsvps', (req, res) => {
+app.get('/api/rsvps', async (req, res) => {
     if (req.headers['x-admin-key'] !== process.env.ADMIN_KEY) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
@@ -184,7 +184,7 @@ app.get('/api/rsvps', (req, res) => {
 });
 
 // GET: Download RSVPs as CSV (Fixed Encoding)
-app.get('/api/rsvps/export/csv', (req, res) => {
+app.get('/api/rsvps/export/csv', async (req, res) => {
     if (req.headers['x-admin-key'] !== process.env.ADMIN_KEY) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
@@ -245,7 +245,7 @@ app.get('/api/rsvps/export/csv', (req, res) => {
 });
 
 // DELETE: Remove an RSVP
-app.delete('/api/rsvps/:id', (req, res) => {
+app.delete('/api/rsvps/:id', async (req, res) => {
     if (req.headers['x-admin-key'] !== process.env.ADMIN_KEY) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
