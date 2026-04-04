@@ -37,7 +37,7 @@ app.post('/api/rsvp', async (req, res) => {
 try {
 const rsvpData = {
 id: Date.now(),
-…req.body,
+...req.body,
 submittedAt: new Date().toISOString()
 };
 
