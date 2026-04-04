@@ -2,6 +2,7 @@ const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
+const {Pool} = require('pg');
 require('dotenv').config();
 
 const app = express();
@@ -13,6 +14,33 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // In-memory storage
 let rsvps = [];
+
+const pool = new Pool({
+	connectionString: process.env.DATABASE_URL,
+	ssl: {
+		rejectUnauthorized: false // required for renders managed ssl
+	}
+});
+
+// Helper to create the table if it doesn't exist (Runs once on startup)
+const initDb = async () => {
+    const queryText = `
+        CREATE TABLE IF NOT EXISTS rsvps (
+            id SERIAL PRIMARY KEY,
+            guest_name TEXT NOT NULL,
+            parent_name TEXT,
+            email TEXT,
+            phone TEXT,
+            attending TEXT,
+            guests INTEGER DEFAULT 0,
+            allergies TEXT,
+            comments TEXT,
+            submitted_at TIMESTAMPTZ DEFAULT NOW()
+        );
+    `;
+    await pool.query(queryText);
+};
+initDb().catch(console.error);
 
 // Route for the landing page
 app.get('/', (req, res) => {
@@ -44,7 +72,18 @@ app.post('/api/rsvp', async (req, res) => {
     try {
         const { guestName, parentName, email, attending, guests, allergies, comments, phone } = req.body;
 
-        const rsvpData = {
+	try {
+        const query = `
+            INSERT INTO rsvps (guest_name, parent_name, email, phone, attending, guests, allergies, comments)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+            RETURNING id;
+        `;
+        const values = [guestName, parentName, email, phone, attending, parseInt(guests), JSON.stringify(allergies), comments];
+        
+        const result = await pool.query(query, values);
+        const newId = result.rows[0].id;
+
+        /*const rsvpData = {
             id: Date.now(),
             guestName,
             parentName,
@@ -57,7 +96,7 @@ app.post('/api/rsvp', async (req, res) => {
             submittedAt: new Date().toISOString()
         };
 
-        rsvps.push(rsvpData);
+        rsvps.push(rsvpData);*/
 
         // Send confirmation email to guest
         if (email) {
@@ -105,7 +144,7 @@ app.post('/api/rsvp', async (req, res) => {
             }
         }
 
-        res.json({ success: true, message: 'RSVP received successfully!', id: rsvpData.id });
+        res.json({ success: true, message: 'RSVP received successfully!', id: newId });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
@@ -117,7 +156,26 @@ app.get('/api/rsvps', (req, res) => {
         return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    const stats = {
+    try {
+        // Fetch all rows from the database
+        const result = await pool.query('SELECT * FROM rsvps ORDER BY submitted_at DESC');
+        const rows = result.rows;
+
+        const stats = {
+            total: rows.length,
+            attending: rows.filter(r => r.attending === 'Yes').length,
+            notAttending: rows.filter(r => r.attending === 'No').length,
+            totalGuests: rows.reduce((sum, r) => sum + (r.guests || 0), 0),
+            rsvps: rows // Send the actual rows to the admin panel
+        };
+
+        res.json(stats);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Database error" });
+    }
+
+    /*const stats = {
         total: rsvps.length,
         attending: rsvps.filter(r => r.attending === 'Yes').length,
         notAttending: rsvps.filter(r => r.attending === 'No').length,
@@ -125,7 +183,7 @@ app.get('/api/rsvps', (req, res) => {
         rsvps: rsvps
     };
 
-    res.json(stats);
+    res.json(stats);*/
 });
 
 // GET: Download RSVPs as CSV (Fixed Encoding)
@@ -134,6 +192,36 @@ app.get('/api/rsvps/export/csv', (req, res) => {
         return res.status(401).json({ error: 'Unauthorized' });
     }
 
+    try {
+        const result = await pool.query('SELECT * FROM rsvps ORDER BY submitted_at ASC');
+        const rows = result.rows;
+
+        const headers = ['Child Name', 'Parent Name', 'Email', 'Phone', 'Attending', 'Guests', 'Allergies', 'Comments', 'Submitted'];
+        
+        const escapeCsv = (val) => `"${String(val || '').replace(/"/g, '""')}"`;
+
+        const csvRows = rows.map(r => [
+            escapeCsv(r.guest_name),
+            escapeCsv(r.parent_name),
+            escapeCsv(r.email),
+            escapeCsv(r.phone),
+            escapeCsv(r.attending),
+            r.guests,
+            escapeCsv(r.allergies),
+            escapeCsv(r.comments),
+            escapeCsv(r.submitted_at)
+        ].join(','));
+
+        const csvString = [headers.join(','), ...csvRows].join('\n');
+
+        res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+        res.setHeader('Content-Disposition', 'attachment; filename="rsvps.csv"');
+        res.send(csvString);
+    } catch (err) {
+        res.status(500).send("Error generating CSV");
+    }
+
+    /*
     // Header row
     const headers = ['Child Name', 'Parent Name', 'Email', 'Phone', 'Attending', 'Guests', 'Allergies', 'Comments', 'Submitted'];
     
@@ -156,7 +244,7 @@ app.get('/api/rsvps/export/csv', (req, res) => {
 
     res.setHeader('Content-Type', 'text/csv; charset=utf-8');
     res.setHeader('Content-Disposition', 'attachment; filename="rsvps.csv"');
-    res.send(csvString);
+    res.send(csvString);*/
 });
 
 // DELETE: Remove an RSVP
@@ -164,10 +252,18 @@ app.delete('/api/rsvps/:id', (req, res) => {
     if (req.headers['x-admin-key'] !== process.env.ADMIN_KEY) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
+    
+    try {
+        const id = parseInt(req.params.id);
+        await pool.query('DELETE FROM rsvps WHERE id = $1', [id]);
+        res.json({ success: true, message: 'RSVP deleted from database' });
+    } catch (err) {
+        res.status(500).json({ error: "Failed to delete" });
+    }
 
-    const id = parseInt(req.params.id);
-    rsvps = rsvps.filter(r => r.id !== id);
-    res.json({ success: true, message: 'RSVP deleted' });
+    //const id = parseInt(req.params.id);
+    //rsvps = rsvps.filter(r => r.id !== id);
+    //res.json({ success: true, message: 'RSVP deleted' });
 });
 
 app.get('/health', (req, res) => res.json({ status: 'OK' }));
