@@ -9,23 +9,18 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// In-memory storage (for quick start - can be upgraded to database)
+// In-memory storage
 let rsvps = [];
 
 // ============================================
-// EMAIL CONFIGURATION (Optional but recommended)
+// EMAIL CONFIGURATION
 // ============================================
-// Set these in your .env file:
-// GMAIL_USER=your-email@gmail.com
-// GMAIL_PASSWORD=your-app-specific-password
-// ADMIN_EMAIL=your-email@gmail.com
-
 const transporter = nodemailer.createTransport({
-service: 'gmail',
-auth: {
-user: process.env.GMAIL_USER,
-pass: process.env.GMAIL_PASSWORD,
-}
+    service: 'gmail',
+    auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASSWORD,
+    }
 });
 
 // ============================================
@@ -34,149 +29,136 @@ pass: process.env.GMAIL_PASSWORD,
 
 // POST: Receive RSVP submission
 app.post('/api/rsvp', async (req, res) => {
-try {
-const rsvpData = {
-id: Date.now(),
-...req.body,
-submittedAt: new Date().toISOString()
-};
+    try {
+        const { guestName, parentName, email, attending, guests, allergies, comments, phone } = req.body;
 
-```
-    rsvps.push(rsvpData);
+        const rsvpData = {
+            id: Date.now(),
+            guestName,
+            parentName,
+            email,
+            phone: phone || 'Not provided',
+            attending,
+            guests: parseInt(guests) || 0,
+            allergies: Array.isArray(allergies) ? allergies : [],
+            comments: comments || '',
+            submittedAt: new Date().toISOString()
+        };
 
-    // Send confirmation email to guest
-    if (req.body.email) {
-        try {
-            await transporter.sendMail({
-                from: process.env.GMAIL_USER,
-                to: req.body.email,
-                subject: '🦸 RSVP Confirmed - Superhero Birthday Party!',
-                html: `<h2>Your RSVP is Confirmed! </h2>` +
-                      `<p>Hi ${req.body.parentName || 'Parent'},</p>` +
-                      `<p>Thank you for your RSVP! We've received your response:</p>` +
-                      `<ul>` +
-                      `<li><strong>Child's Name:</strong> ${req.body.guestName}</li>` +
-                      `<li><strong>Attending:</strong> ${req.body.attending}</li>` +
-                      `<li><strong>Number of Guests:</strong> ${req.body.guests}</li>` +
-                      `</ul>` +
-                      `<p>We can't wait to celebrate with you! 🦸‍♂️</p>`
-            });
-        } catch (emailErr) {
-            console.log('Email not sent (check credentials):', emailErr.message);
+        rsvps.push(rsvpData);
+
+        // Send confirmation email to guest
+        if (email) {
+            try {
+                await transporter.sendMail({
+                    from: process.env.GMAIL_USER,
+                    to: email,
+                    subject: '🦸 RSVP Confirmed - Superhero Birthday Party!',
+                    html: `
+                        <h2>Your RSVP is Confirmed!</h2>
+                        <p>Hi ${parentName || 'Parent'},</p>
+                        <p>Thank you for your RSVP! We've received your response:</p>
+                        <ul>
+                            <li><strong>Child's Name:</strong> ${guestName}</li>
+                            <li><strong>Attending:</strong> ${attending}</li>
+                            <li><strong>Number of Guests:</strong> ${guests}</li>
+                        </ul>
+                        <p>We can't wait to celebrate with you! 🦸‍♂️</p>`
+                });
+            } catch (emailErr) {
+                console.error('Guest email failed:', emailErr.message);
+            }
         }
-    }
 
-    // Send notification email to admin
-    if (process.env.ADMIN_EMAIL) {
-        try {
-            await transporter.sendMail({
-                from: process.env.GMAIL_USER,
-                to: process.env.ADMIN_EMAIL,
-                subject: `📋 New RSVP: ${req.body.guestName} - ${req.body.attending}`,
-                html: `
-                    <h2>New RSVP Submission</h2>
-                    <ul>
-                        <li><strong>Child's Name:</strong> ${req.body.guestName}</li>
-                        <li><strong>Parent/Guardian:</strong> ${req.body.parentName}</li>
-                        <li><strong>Email:</strong> ${req.body.email}</li>
-                        <li><strong>Phone:</strong> ${req.body.phone || 'Not provided'}</li>
-                        <li><strong>Attending:</strong> ${req.body.attending}</li>
-                        <li><strong>Number of Guests:</strong> ${req.body.guests}</li>
-                        <li><strong>Allergies:</strong> ${req.body.allergies.join(', ') || 'None'}</li>
-                        <li><strong>Comments:</strong> ${req.body.comments || 'None'}</li>
-                    </ul>
-                `
-            });
-        } catch (emailErr) {
-            console.log('Admin email not sent:', emailErr.message);
+        // Send notification email to admin
+        if (process.env.ADMIN_EMAIL) {
+            try {
+                await transporter.sendMail({
+                    from: process.env.GMAIL_USER,
+                    to: process.env.ADMIN_EMAIL,
+                    subject: `📋 New RSVP: ${guestName} - ${attending}`,
+                    html: `
+                        <h2>New RSVP Submission</h2>
+                        <ul>
+                            <li><strong>Child:</strong> ${guestName}</li>
+                            <li><strong>Parent:</strong> ${parentName}</li>
+                            <li><strong>Email:</strong> ${email}</li>
+                            <li><strong>Attending:</strong> ${attending}</li>
+                            <li><strong>Guests:</strong> ${guests}</li>
+                            <li><strong>Allergies:</strong> ${rsvpData.allergies.join(', ') || 'None'}</li>
+                        </ul>`
+                });
+            } catch (emailErr) {
+                console.error('Admin email failed:', emailErr.message);
+            }
         }
+
+        res.json({ success: true, message: 'RSVP received successfully!', id: rsvpData.id });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
     }
-
-    res.json({
-        success: true,
-        message: 'RSVP received successfully!',
-        id: rsvpData.id
-    });
-} catch (error) {
-    res.status(500).json({ success: false, error: error.message });
-}
-```
-
 });
 
-// GET: Retrieve all RSVPs (Protected with simple key)
+// GET: Retrieve all RSVPs
 app.get('/api/rsvps', (req, res) => {
-const adminKey = req.headers['x-admin-key'];
+    if (req.headers['x-admin-key'] !== process.env.ADMIN_KEY) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
 
-```
-// Check if admin key matches (set in .env)
-if (adminKey !== process.env.ADMIN_KEY) {
-    return res.status(401).json({ error: 'Unauthorized' });
-}
+    const stats = {
+        total: rsvps.length,
+        attending: rsvps.filter(r => r.attending === 'Yes').length,
+        notAttending: rsvps.filter(r => r.attending === 'No').length,
+        totalGuests: rsvps.reduce((sum, r) => sum + (r.guests || 0), 0),
+        rsvps: rsvps
+    };
 
-const stats = {
-    total: rsvps.length,
-    attending: rsvps.filter(r => r.attending === 'Yes').length,
-    notAttending: rsvps.filter(r => r.attending === 'No').length,
-    maybe: rsvps.filter(r => r.attending === 'Maybe').length,
-    totalGuests: rsvps.reduce((sum, r) => sum + parseInt(r.guests || 1), 0),
-    rsvps: rsvps
-};
-
-res.json(stats);
-```
-
+    res.json(stats);
 });
 
-// GET: Download RSVPs as CSV
+// GET: Download RSVPs as CSV (Fixed Encoding)
 app.get('/api/rsvps/export/csv', (req, res) => {
-const adminKey = req.headers['x-admin-key'];
+    if (req.headers['x-admin-key'] !== process.env.ADMIN_KEY) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
 
-```
-if (adminKey !== process.env.ADMIN_KEY) {
-    return res.status(401).json({ error: 'Unauthorized' });
-}
+    // Header row
+    const headers = ['Child Name', 'Parent Name', 'Email', 'Phone', 'Attending', 'Guests', 'Allergies', 'Comments', 'Submitted'];
+    
+    // Helper to escape CSV values (handles commas and quotes)
+    const escapeCsv = (val) => `"${String(val).replace(/"/g, '""')}"`;
 
-let csv = 'Child Name,Parent Name,Email,Phone,Attending,Guests,Allergies,Comments,Submitted\n';
+    const csvRows = rsvps.map(r => [
+        escapeCsv(r.guestName),
+        escapeCsv(r.parentName),
+        escapeCsv(r.email),
+        escapeCsv(r.phone),
+        escapeCsv(r.attending),
+        r.guests,
+        escapeCsv(r.allergies.join('; ')),
+        escapeCsv(r.comments),
+        escapeCsv(r.submittedAt)
+    ].join(','));
 
-rsvps.forEach(rsvp => {
-    csv += `"${rsvp.guestName}","${rsvp.parentName}","${rsvp.email}","${rsvp.phone || ''}","${rsvp.attending}","${rsvp.guests}","${rsvp.allergies.join('; ')}","${rsvp.comments || ''}","${rsvp.submittedAt}"\n`;
+    const csvString = [headers.join(','), ...csvRows].join('\n');
+
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', 'attachment; filename="rsvps.csv"');
+    res.send(csvString);
 });
 
-res.setHeader('Content-Type', 'text/csv');
-res.setHeader('Content-Disposition', 'attachment; filename="rsvps.csv"');
-res.send(csv);
-```
-
-});
-
-// DELETE: Remove an RSVP (Protected)
+// DELETE: Remove an RSVP
 app.delete('/api/rsvps/:id', (req, res) => {
-const adminKey = req.headers['x-admin-key'];
+    if (req.headers['x-admin-key'] !== process.env.ADMIN_KEY) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
 
-```
-if (adminKey !== process.env.ADMIN_KEY) {
-    return res.status(401).json({ error: 'Unauthorized' });
-}
-
-const id = parseInt(req.params.id);
-rsvps = rsvps.filter(r => r.id !== id);
-
-res.json({ success: true, message: 'RSVP deleted' });
-```
-
+    const id = parseInt(req.params.id);
+    rsvps = rsvps.filter(r => r.id !== id);
+    res.json({ success: true, message: 'RSVP deleted' });
 });
 
-// Health check
-app.get('/health', (req, res) => {
-res.json({ status: 'Server is running!' });
-});
+app.get('/health', (req, res) => res.json({ status: 'OK' }));
 
-// ============================================
-// START SERVER
-// ============================================
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-console.log(`🦸 RSVP Server running on http://localhost:${PORT}`);
-console.log(`📊 Admin Dashboard: http://localhost:${PORT}/admin`);
-});
+app.listen(PORT, '0.0.0.0', () => console.log(`🦸 Server running on port ${PORT}`));
