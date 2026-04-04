@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🦸 Admin Dashboard - RSVP Manager</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    body {
+        font-family: 'Quicksand', sans-serif;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .header {
+        background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
+        border: 3px solid #DC143C;
+        border-radius: 20px;
+        padding: 30px;
+        margin-bottom: 30px;
+        text-align: center;
+        box-shadow: 0 20px 60px rgba(255, 0, 0, 0.3);
+    }
+
+    .header h1 {
+        font-family: 'Fredoka', sans-serif;
+        font-size: 42px;
+        color: #FF0000;
+        margin-bottom: 10px;
+        text-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+    }
+
+    .header p {
+        color: #FFD700;
+        font-size: 16px;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    }
+
+    .login-section {
+        background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
+        border: 2px solid #DC143C;
+        border-radius: 20px;
+        padding: 30px;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .login-section h2 {
+        color: #FFD700;
+        margin-bottom: 20px;
+        font-family: 'Fredoka', sans-serif;
+    }
+
+    .login-form {
+        display: flex;
+        gap: 10px;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    input[type="password"] {
+        flex: 1;
+        padding: 12px 15px;
+        border: 2px solid #DC143C;
+        border-radius: 10px;
+        background: #1a2a3a;
+        color: #E8E8E8;
+        font-family: 'Quicksand', sans-serif;
+    }
+
+    input[type="password"]:focus {
+        outline: none;
+        border-color: #FF0000;
+        box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
+    }
+
+    .btn {
+        padding: 12px 25px;
+        border: none;
+        border-radius: 10px;
+        font-family: 'Fredoka', sans-serif;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #DC143C 0%, #FF0000 100%);
+        color: white;
+        box-shadow: 0 8px 20px rgba(220, 20, 60, 0.5);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 30px rgba(255, 0, 0, 0.6);
+    }
+
+    .btn-secondary {
+        background: #FFD700;
+        color: #1a1a2e;
+        margin-left: 10px;
+    }
+
+    .btn-secondary:hover {
+        background: #FFC700;
+    }
+
+    .btn-danger {
+        background: #8B0000;
+        color: white;
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+
+    .btn-danger:hover {
+        background: #A00000;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+        display: none;
+    }
+
+    .stats-grid.show {
+        display: grid;
+    }
+
+    .stat-card {
+        background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
+        border: 2px solid #DC143C;
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: inset 0 0 20px rgba(255, 0, 0, 0.05);
+    }
+
+    .stat-card h3 {
+        color: #FFD700;
+        font-size: 14px;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+    }
+
+    .stat-card .number {
+        color: #FF0000;
+        font-family: 'Fredoka', sans-serif;
+        font-size: 36px;
+        font-weight: 700;
+    }
+
+    .controls {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        display: none;
+    }
+
+    .controls.show {
+        display: flex;
+    }
+
+    .filter-btn {
+        padding: 10px 15px;
+        border: 2px solid #FFD700;
+        background: transparent;
+        color: #FFD700;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .filter-btn.active {
+        background: #FFD700;
+        color: #1a1a2e;
+    }
+
+    .filter-btn:hover {
+        background: #FFD700;
+        color: #1a1a2e;
+    }
+
+    .table-wrapper {
+        background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
+        border: 2px solid #DC143C;
+        border-radius: 15px;
+        overflow: hidden;
+        display: none;
+        box-shadow: 0 20px 60px rgba(255, 0, 0, 0.2);
+    }
+
+    .table-wrapper.show {
+        display: block;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    thead {
+        background: linear-gradient(135deg, #1a2a3a 0%, #243447 100%);
+    }
+
+    th {
+        color: #FFD700;
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+        border-bottom: 2px solid #DC143C;
+    }
+
+    td {
+        color: #E8E8E8;
+        padding: 15px;
+        border-bottom: 1px solid #DC143C;
+        font-size: 14px;
+    }
+
+    tr:hover {
+        background: rgba(255, 0, 0, 0.05);
+    }
+
+    .status-yes {
+        color: #90EE90;
+        font-weight: 600;
+    }
+
+    .status-no {
+        color: #FF6B6B;
+        font-weight: 600;
+    }
+
+    .status-maybe {
+        color: #FFD700;
+        font-weight: 600;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 40px;
+        color: #999;
+        display: none;
+    }
+
+    .empty-state.show {
+        display: block;
+    }
+
+    .empty-state h3 {
+        color: #FFD700;
+        margin-bottom: 10px;
+    }
+
+    @media (max-width: 768px) {
+        .header h1 {
+            font-size: 28px;
+        }
+
+        .login-form {
+            flex-direction: column;
+        }
+
+        .btn-secondary {
+            margin-left: 0;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+
+        table {
+            font-size: 12px;
+        }
+
+        th, td {
+            padding: 10px;
+        }
+    }
+
+    .error {
+        color: #FF6B6B;
+        background: rgba(255, 0, 0, 0.1);
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        border-left: 4px solid #FF6B6B;
+    }
+
+    .success {
+        color: #90EE90;
+        background: rgba(144, 238, 144, 0.1);
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        border-left: 4px solid #90EE90;
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🦸 RSVP Admin Dashboard</h1>
+            <p>Track all superhero party RSVPs in one place</p>
+        </div>
+
+```
+    <!-- Login Section -->
+    <div class="login-section">
+        <h2>🔐 Enter Admin Password</h2>
+        <div id="errorMessage" class="error" style="display: none;"></div>
+        <div id="successMessage" class="success" style="display: none;"></div>
+        <div class="login-form">
+            <input type="password" id="adminKey" placeholder="Enter your admin key">
+            <button class="btn btn-primary" onclick="login()">Login</button>
+            <button class="btn btn-secondary" onclick="loadDemoData()">Demo Data</button>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-grid" id="statsGrid">
+        <div class="stat-card">
+            <h3>Total Responses</h3>
+            <div class="number" id="statTotal">0</div>
+        </div>
+        <div class="stat-card">
+            <h3>Attending</h3>
+            <div class="number" id="statAttending">0</div>
+        </div>
+        <div class="stat-card">
+            <h3>Not Attending</h3>
+            <div class="number" id="statNotAttending">0</div>
+        </div>
+        <div class="stat-card">
+            <h3>Maybe</h3>
+            <div class="number" id="statMaybe">0</div>
+        </div>
+        <div class="stat-card">
+            <h3>Total Guests</h3>
+            <div class="number" id="statGuests">0</div>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls" id="controls">
+        <button class="filter-btn active" onclick="filterRsvps('all')">All</button>
+        <button class="filter-btn" onclick="filterRsvps('Yes')">✅ Attending</button>
+        <button class="filter-btn" onclick="filterRsvps('No')">❌ Not Attending</button>
+        <button class="filter-btn" onclick="filterRsvps('Maybe')">❓ Maybe</button>
+        <button class="btn btn-secondary" onclick="exportCSV()">📥 Export CSV</button>
+        <button class="btn btn-secondary" onclick="logout()">Logout</button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrapper" id="tableWrapper">
+        <table id="rsvpTable">
+            <thead>
+                <tr>
+                    <th>Child's Name</th>
+                    <th>Parent/Guardian</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Status</th>
+                    <th>Guests</th>
+                    <th>Allergies</th>
+                    <th>Comments</th>
+                    <th>Submitted</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="rsvpBody">
+            </tbody>
+        </table>
+        <div class="empty-state" id="emptyState">
+            <h3>No RSVPs yet</h3>
+            <p>Guests will appear here as they submit their responses</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    let allRsvps = [];
+    let currentFilter = 'all';
+    let adminKey = '';
+
+    // Login function
+    async function login() {
+        adminKey = document.getElementById('adminKey').value;
+        if (!adminKey) {
+            showError('Please enter an admin key');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/rsvps', {
+                headers: {
+                    'x-admin-key': adminKey
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Invalid admin key');
+            }
+
+            const data = await response.json();
+            allRsvps = data.rsvps;
+            displayStats(data);
+            displayRsvps(allRsvps);
+            showSuccess('Login successful! 🎉');
+            
+            // Show dashboard
+            document.getElementById('statsGrid').classList.add('show');
+            document.getElementById('controls').classList.add('show');
+            document.getElementById('tableWrapper').classList.add('show');
+        } catch (error) {
+            showError('Failed to load RSVPs: ' + error.message);
+            adminKey = '';
+        }
+    }
+
+    // Display stats
+    function displayStats(data) {
+        document.getElementById('statTotal').textContent = data.total;
+        document.getElementById('statAttending').textContent = data.attending;
+        document.getElementById('statNotAttending').textContent = data.notAttending;
+        document.getElementById('statMaybe').textContent = data.maybe;
+        document.getElementById('statGuests').textContent = data.totalGuests;
+    }
+
+    // Display RSVPs in table
+    function displayRsvps(rsvps) {
+        const tbody = document.getElementById('rsvpBody');
+        const emptyState = document.getElementById('emptyState');
+
+        if (rsvps.length === 0) {
+            tbody.innerHTML = '';
+            emptyState.classList.add('show');
+            return;
+        }
+
+        emptyState.classList.remove('show');
+        tbody.innerHTML = rsvps.map(rsvp => `
+            <tr>
+                <td>${rsvp.guestName}</td>
+                <td>${rsvp.parentName}</td>
+                <td><a href="mailto:${rsvp.email}" style="color: #FFD700;">${rsvp.email}</a></td>
+                <td>${rsvp.phone || '-'}</td>
+                <td>
+                    <span class="status-${rsvp.attending === 'Yes' ? 'yes' : rsvp.attending === 'No' ? 'no' : 'maybe'}">
+                        ${rsvp.attending}
+                    </span>
+                </td>
+                <td>${rsvp.guests}</td>
+                <td>${rsvp.allergies && rsvp.allergies.length > 0 ? rsvp.allergies.join(', ') : '-'}</td>
+                <td>${rsvp.comments ? rsvp.comments.substring(0, 30) + '...' : '-'}</td>
+                <td style="font-size: 12px;">${new Date(rsvp.submittedAt).toLocaleDateString()}</td>
+                <td><button class="btn btn-danger" onclick="deleteRsvp(${rsvp.id})">Delete</button></td>
+            </tr>
+        `).join('');
+    }
+
+    // Filter RSVPs
+    function filterRsvps(status) {
+        currentFilter = status;
+        
+        // Update active button
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        event.target.classList.add('active');
+
+        // Filter and display
+        if (status === 'all') {
+            displayRsvps(allRsvps);
+        } else {
+            displayRsvps(allRsvps.filter(r => r.attending === status));
+        }
+    }
+
+    // Delete RSVP
+    async function deleteRsvp(id) {
+        if (!confirm('Are you sure you want to delete this RSVP?')) return;
+
+        try {
+            const response = await fetch(`/api/rsvps/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'x-admin-key': adminKey
+                }
+            });
+
+            if (!response.ok) throw new Error('Failed to delete');
+
+            // Reload data
+            login();
+            showSuccess('RSVP deleted successfully');
+        } catch (error) {
+            showError('Failed to delete: ' + error.message);
+        }
+    }
+
+    // Export to CSV
+    async function exportCSV() {
+        try {
+            const response = await fetch('/api/rsvps/export/csv', {
+                headers: {
+                    'x-admin-key': adminKey
+                }
+            });
+
+            if (!response.ok) throw new Error('Export failed');
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `rsvps-${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        } catch (error) {
+            showError('Failed to export: ' + error.message);
+        }
+    }
+
+    // Load demo data
+    function loadDemoData() {
+        allRsvps = [
+            {
+                id: 1,
+                guestName: 'Peter Parker',
+                parentName: 'Mary Parker',
+                email: 'mary@example.com',
+                phone: '(555) 123-4567',
+                attending: 'Yes',
+                guests: 2,
+                allergies: ['Nut Allergy'],
+                comments: 'Can he wear his Spider-Man costume?',
+                submittedAt: new Date().toISOString()
+            },
+            {
+                id: 2,
+                guestName: 'Tony Stark',
+                parentName: 'Pepper Potts',
+                email: 'pepper@example.com',
+                phone: '(555) 987-6543',
+                attending: 'Yes',
+                guests: 1,
+                allergies: [],
+                comments: '',
+                submittedAt: new Date().toISOString()
+            },
+            {
+                id: 3,
+                guestName: 'Bruce Banner',
+                parentName: 'Bruce Banner Sr.',
+                email: 'bruce@example.com',
+                phone: '',
+                attending: 'Maybe',
+                guests: 1,
+                allergies: ['Gluten Free'],
+                comments: 'Might be working late',
+                submittedAt: new Date().toISOString()
+            }
+        ];
+
+        const stats = {
+            total: allRsvps.length,
+            attending: 2,
+            notAttending: 0,
+            maybe: 1,
+            totalGuests: 4
+        };
+
+        displayStats(stats);
+        displayRsvps(allRsvps);
+        document.getElementById('statsGrid').classList.add('show');
+        document.getElementById('controls').classList.add('show');
+        document.getElementById('tableWrapper').classList.add('show');
+        showSuccess('Demo data loaded! This is what your dashboard will look like.');
+    }
+
+    // Logout
+    function logout() {
+        adminKey = '';
+        document.getElementById('adminKey').value = '';
+        document.getElementById('statsGrid').classList.remove('show');
+        document.getElementById('controls').classList.remove('show');
+        document.getElementById('tableWrapper').classList.remove('show');
+        allRsvps = [];
+    }
+
+    // Show error
+    function showError(message) {
+        const errorDiv = document.getElementById('errorMessage');
+        errorDiv.textContent = message;
+        errorDiv.style.display = 'block';
+        setTimeout(() => {
+            errorDiv.style.display = 'none';
+        }, 5000);
+    }
+
+    // Show success
+    function showSuccess(message) {
+        const successDiv = document.getElementById('successMessage');
+        successDiv.textContent = message;
+        successDiv.style.display = 'block';
+        setTimeout(() => {
+            successDiv.style.display = 'none';
+        }, 5000);
+    }
+</script>
+```
+
+</body>
+</html>

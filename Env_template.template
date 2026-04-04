@@ -1,0 +1,36 @@
+# RSVP Server Configuration
+# Copy this to a file named .env in the same directory as server.js
+
+# Server Port (default: 3000)
+PORT=3000
+
+# Admin Key - Change this to a secure password!
+# You'll use this to access the admin dashboard
+ADMIN_KEY=your-super-secret-admin-key-12345
+
+# ==========================================
+# OPTIONAL: Email Notifications Setup
+# ==========================================
+# To send email confirmations to guests and notifications to yourself,
+# follow these steps:
+
+# 1. Enable Gmail App Password:
+#    - Go to https://myaccount.google.com/
+#    - Click "Security" in left menu
+#    - Enable "2-Step Verification" if not already done
+#    - Go back to Security and scroll to "App passwords"
+#    - Select "Mail" and "Windows Computer" (or your device)
+#    - Copy the 16-character password
+
+# 2. Set your email address
+GMAIL_USER=your-email@gmail.com
+
+# 3. Set the app password from step 1 (16 characters without spaces)
+GMAIL_PASSWORD=xxxxxxxxxxxxxxxx
+
+# 4. Set where admin notifications should go
+ADMIN_EMAIL=your-email@gmail.com
+
+# When guests RSVP:
+# - They get a confirmation email at their provided email
+# - You get notified at ADMIN_EMAIL with all their details
