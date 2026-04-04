@@ -155,7 +155,22 @@ app.get('/api/rsvps', async (req, res) => {
 
     try {
         // Fetch all rows from the database
-        const result = await pool.query('SELECT * FROM rsvps ORDER BY submitted_at DESC');
+        //const result = await pool.query('SELECT * FROM rsvps ORDER BY submitted_at DESC');
+		const result = await pool.query(`
+	        SELECT 
+	            id, 
+	            guest_name AS "guestName", 
+	            parent_name AS "parentName", 
+	            email, 
+	            phone, 
+	            attending, 
+	            guests, 
+	            allergies, 
+	            comments, 
+	            submitted_at AS "submittedAt" 
+	        FROM rsvps 
+	        ORDER BY submitted_at DESC
+	    `);
         const rows = result.rows;
 
         const stats = {
