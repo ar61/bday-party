@@ -154,37 +154,39 @@ app.get('/api/rsvps', async (req, res) => {
     }
 
     try {
-        // Fetch all rows from the database
-        //const result = await pool.query('SELECT * FROM rsvps ORDER BY submitted_at DESC');
-		const result = await pool.query(`
-	        SELECT 
-	            id, 
-	            guest_name AS "guestName", 
-	            parent_name AS "parentName", 
-	            email, 
-	            phone, 
-	            attending, 
-	            guests, 
-	            allergies, 
-	            comments, 
-	            submitted_at AS "submittedAt" 
-	        FROM rsvps 
-	        ORDER BY submitted_at DESC
-	    `);
+        // Use ALIASES (AS "...") so the SQL names match your HTML/JS property names
+        const result = await pool.query(`
+            SELECT 
+                id, 
+                guest_name AS "guestName", 
+                parent_name AS "parentName", 
+                email, 
+                phone, 
+                attending, 
+                guests, 
+                allergies, 
+                comments, 
+                submitted_at AS "submittedAt" 
+            FROM rsvps 
+            ORDER BY submitted_at DESC
+        `);
+
         const rows = result.rows;
 
+        // Calculate stats exactly as admin.html expects them
         const stats = {
             total: rows.length,
             attending: rows.filter(r => r.attending === 'Yes').length,
             notAttending: rows.filter(r => r.attending === 'No').length,
-            totalGuests: rows.reduce((sum, r) => sum + (r.guests || 0), 0),
-            rsvps: rows // Send the actual rows to the admin panel
+            maybe: rows.filter(r => r.attending === 'Maybe').length, // Ensure this exists
+            totalGuests: rows.reduce((sum, r) => sum + (Number(r.guests) || 0), 0),
+            rsvps: rows 
         };
 
         res.json(stats);
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Database error" });
+        console.error("DB Error:", err);
+        res.status(500).json({ error: "Internal Server Error" });
     }
 
     /*const stats = {
