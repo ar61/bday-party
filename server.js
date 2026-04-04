@@ -69,9 +69,6 @@ const transporter = nodemailer.createTransport({
 
 // POST: Receive RSVP submission
 app.post('/api/rsvp', async (req, res) => {
-    try {
-        const { guestName, parentName, email, attending, guests, allergies, comments, phone } = req.body;
-
 	try {
         const query = `
             INSERT INTO rsvps (guest_name, parent_name, email, phone, attending, guests, allergies, comments)
