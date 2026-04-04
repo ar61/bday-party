@@ -1,6 +1,7 @@
 const express = require(‘express’);
 const cors = require(‘cors’);
 const nodemailer = require(‘nodemailer’);
+const path = require(‘path’);
 require(‘dotenv’).config();
 
 const app = express();
@@ -8,6 +9,7 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, ‘public’)));
 
 // In-memory storage (for quick start - can be upgraded to database)
 let rsvps = [];
@@ -29,6 +31,20 @@ pass: process.env.GMAIL_PASSWORD,
 });
 
 // ============================================
+// STATIC FILE ROUTES
+// ============================================
+
+// Serve guest RSVP form
+app.get(’/’, (req, res) => {
+res.sendFile(path.join(__dirname, ‘public’, ‘index.html’));
+});
+
+// Serve admin dashboard
+app.get(’/admin’, (req, res) => {
+res.sendFile(path.join(__dirname, ‘public’, ‘admin.html’));
+});
+
+// ============================================
 // API ENDPOINTS
 // ============================================
 
@@ -45,7 +61,7 @@ submittedAt: new Date().toISOString()
     rsvps.push(rsvpData);
 
     // Send confirmation email to guest
-    if (req.body.email) {
+    if (req.body.email && process.env.GMAIL_USER) {
         try {
             await transporter.sendMail({
                 from: process.env.GMAIL_USER,
@@ -69,7 +85,7 @@ submittedAt: new Date().toISOString()
     }
 
     // Send notification email to admin
-    if (process.env.ADMIN_EMAIL) {
+    if (process.env.ADMIN_EMAIL && process.env.GMAIL_USER) {
         try {
             await transporter.sendMail({
                 from: process.env.GMAIL_USER,
@@ -181,4 +197,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
 console.log(`🦸 RSVP Server running on http://localhost:${PORT}`);
 console.log(`📊 Admin Dashboard: http://localhost:${PORT}/admin`);
+console.log(`📝 Guest Form: http://localhost:${PORT}`);
 });
