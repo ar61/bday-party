@@ -194,7 +194,7 @@ res.json({ status: ‘Server is running!’ });
 // START SERVER
 // ============================================
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
 console.log(`🦸 RSVP Server running on http://localhost:${PORT}`);
 console.log(`📊 Admin Dashboard: http://localhost:${PORT}/admin`);
 console.log(`📝 Guest Form: http://localhost:${PORT}`);
