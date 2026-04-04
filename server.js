@@ -51,7 +51,7 @@ submittedAt: new Date().toISOString()
                 from: process.env.GMAIL_USER,
                 to: req.body.email,
                 subject: '🦸 RSVP Confirmed - Superhero Birthday Party!',
-                html: `<h2>Your RSVP is Confirmed! 🎉</h2>` +
+                html: `<h2>Your RSVP is Confirmed! </h2>` +
                       `<p>Hi ${req.body.parentName || 'Parent'},</p>` +
                       `<p>Thank you for your RSVP! We've received your response:</p>` +
                       `<ul>` +
