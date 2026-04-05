@@ -10,6 +10,7 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // In-memory storage
@@ -69,16 +70,22 @@ const transporter = nodemailer.createTransport({
 
 // POST: Receive RSVP submission
 app.post('/api/rsvp', async (req, res) => {
-	try {
-        const query = `
-            INSERT INTO rsvps (guest_name, parent_name, email, phone, attending, guests, allergies, comments)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-            RETURNING id;
-        `;
-        const values = [guestName, parentName, email, phone, attending, parseInt(guests), JSON.stringify(allergies), comments];
-        
-        const result = await pool.query(query, values);
-        const newId = result.rows[0].id;
+  console.log("Body received:", req.body); // DEBUG: Check if this is {}
+  const { guestName, parentName, email, phone, attending, guests, allergies, comments } = req.body;
+
+  try {
+       	const result = await pool.query(
+           `INSERT INTO rsvps (guest_name, parent_name, email, phone, attending, guests, allergies, comments)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+           [guestName, parentName, email, phone, attending, guests, allergies, comments]
+       	);
+	// res.status(201).json({ message: "RSVP saved to database!" });
+	console.log("Inserted row:", result.rows[0]);
+	res.status(201).json(result.rows[0]);
+   } catch (err) {
+       	console.error("Insert Error:", err);
+       	res.status(500).send("Failed to save RSVP");
+   }
 
         /*const rsvpData = {
             id: Date.now(),
@@ -94,7 +101,7 @@ app.post('/api/rsvp', async (req, res) => {
         };
 
         rsvps.push(rsvpData);*/
-
+    try {
         // Send confirmation email to guest
         if (email) {
             try {
@@ -133,7 +140,7 @@ app.post('/api/rsvp', async (req, res) => {
                             <li><strong>Email:</strong> ${email}</li>
                             <li><strong>Attending:</strong> ${attending}</li>
                             <li><strong>Guests:</strong> ${guests}</li>
-                            <li><strong>Allergies:</strong> ${rsvpData.allergies.join(', ') || 'None'}</li>
+                            <li><strong>Allergies:</strong> ${allergies}</li>
                         </ul>`
                 });
             } catch (emailErr) {
@@ -149,6 +156,11 @@ app.post('/api/rsvp', async (req, res) => {
 
 // GET: Retrieve all RSVPs
 app.get('/api/rsvps', async (req, res) => {
+	// DEBUG LOGS
+    const clientKey = req.headers['x-admin-key'];
+    console.log("--- Admin Access Attempt ---");
+    console.log("Header received:", clientKey);
+    console.log("Server expected:", process.env.ADMIN_KEY);
     if (req.headers['x-admin-key'] !== process.env.ADMIN_KEY) {
         return res.status(401).json({ error: 'Unauthorized' });
     }

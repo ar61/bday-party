@@ -654,41 +654,62 @@
     }
 
     // Handle form submission
-    document.getElementById('rsvpForm').addEventListener('submit', function(e) {
-        e.preventDefault();
+    document.getElementById('rsvpForm').addEventListener('submit', async function(e) {
+	    e.preventDefault();
 
-        const formData = {
-            guestName: document.getElementById('guestName').value,
-            parentName: document.getElementById('parentName').value,
-            email: document.getElementById('email').value,
-            phone: document.getElementById('phone').value,
-            attending: document.querySelector('input[name="attending"]:checked').value,
-            guests: document.getElementById('guests').value,
-            allergies: Array.from(document.querySelectorAll('input[name="allergies"]:checked')).map(cb => cb.value),
-            comments: document.getElementById('comments').value,
-            timestamp: new Date().toLocaleString()
-        };
+	    // 1. Gather the data
+	    const formData = {
+		guestName: document.getElementById('guestName').value,
+		parentName: document.getElementById('parentName').value,
+		email: document.getElementById('email').value,
+		phone: document.getElementById('phone').value,
+		attending: document.querySelector('input[name="attending"]:checked').value,
+		guests: document.getElementById('guests').value,
+		// Converting array to string or keeping as array depending on your Postgres column type
+		allergies: Array.from(document.querySelectorAll('input[name="allergies"]:checked')).map(cb => cb.value).join(', '),
+		comments: document.getElementById('comments').value
+	    };
 
-        // Save to localStorage
-        let rsvps = JSON.parse(localStorage.getItem('rsvps')) || [];
-        rsvps.push(formData);
-        localStorage.setItem('rsvps', JSON.stringify(rsvps));
+	    try {
+		// 2. Call the Server API
+		const response = await fetch('/api/rsvp', {
+		    method: 'POST',
+		    headers: {
+			'Content-Type': 'application/json',
+		    },
+		    body: JSON.stringify(formData)
+		});
 
-        // Show success message
-        const successMessage = document.getElementById('successMessage');
-        successMessage.classList.add('show');
+		if (!response.ok) {
+		    throw new Error(`Server responded with ${response.status}`);
+		}
 
-        // Reset form
-        document.getElementById('rsvpForm').reset();
+		const result = await response.json();
+		console.log("Success:", result);
 
-        // Hide success message after 3 seconds
-        setTimeout(() => {
-            successMessage.classList.remove('show');
-        }, 3000);
+		// 3. UI Updates (Only if the server actually saved it)
+		const successMessage = document.getElementById('successMessage');
+		successMessage.classList.add('show');
+		document.getElementById('rsvpForm').reset();
 
-        // Update RSVP list
-        displayRsvpList(rsvps);
-    });
+		setTimeout(() => {
+		    successMessage.classList.remove('show');
+		}, 3000);
+
+		// Optional: Keep localStorage as a local backup/cache
+		let localRsvps = JSON.parse(localStorage.getItem('rsvps')) || [];
+		localRsvps.push(formData);
+		localStorage.setItem('rsvps', JSON.stringify(localRsvps));
+		
+		if (typeof displayRsvpList === "function") {
+		    displayRsvpList(localRsvps);
+		}
+
+	    } catch (error) {
+		console.error("Submission Error:", error);
+		alert("Oops! The RSVP couldn't be saved. Please check your internet or try again later.");
+	    }
+	});
 
     // Display RSVP list
     function displayRsvpList(rsvps) {
