@@ -1,0 +1,311 @@
+/* MODERN AVENGERS HUD THEME */
+:root {
+    --stark-blue: #00d4ff;
+    --cap-blue: #0047ab;
+    --hulk-green: #2ecc71;
+    --spidey-red: #e62429;
+    --thor-gold: #ffcc00;
+    --black-panther-purple: #4b0082;
+    --dark-void: #050a14;
+    --glass-bg: rgba(10, 25, 47, 0.85);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--dark-void);
+    /* New reliable high-tech background link */
+    background-image: linear-gradient(rgba(5, 10, 20, 0.8), rgba(5, 10, 20, 0.8)), 
+                      url('assets/avengers_bg.avif');/*url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1920');*/
+    background-attachment: fixed;
+    background-size: cover;
+    color: #ffffff;
+    font-family: 'Rajdhani', sans-serif;
+    overflow-x: hidden;
+}
+
+/* BLAST DOORS */
+.door {
+    position: fixed;
+    top: 0;
+    width: 50%;
+    height: 100vh;
+    background: #111;
+    z-index: 1000;
+    transition: transform 2.5s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#blast-door-left { left: 0; border-right: 4px solid var(--cap-blue); }
+#blast-door-right { right: 0; border-left: 4px solid var(--spidey-red); }
+
+.open-left { transform: translateX(-100%); }
+.open-right { transform: translateX(100%); }
+
+.lock-mechanism {
+    text-align: center;
+    z-index: 1001;
+}
+
+#access-btn {
+    padding: 15px 40px;
+    background: transparent;
+    border: 2px solid var(--stark-blue);
+    color: var(--stark-blue);
+    font-family: 'Orbitron', sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 20px var(--stark-blue);
+    transition: all 0.3s ease;
+}
+
+#access-btn:hover {
+    background: var(--stark-blue);
+    color: #000;
+}
+
+/* HERO HERO SECTION */
+#venue-hero {
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 50px;
+}
+
+.hero-overlay {
+    background: var(--glass-bg);
+    padding: 40px;
+    border-radius: 15px;
+    border: 1px solid var(--stark-blue);
+    text-align: center;
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
+}
+
+.venue-card h2 { color: var(--thor-gold); margin-bottom: 5px; }
+
+/* CONTAINER & FORM */
+.container {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 40px;
+    background: var(--glass-bg);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 10px;
+    backdrop-filter: blur(5px);
+}
+
+.form-group { margin-bottom: 20px; }
+
+label {
+    display: block;
+    color: var(--stark-blue);
+    font-weight: bold;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #444;
+    color: #fff;
+    box-sizing: border-box;
+    border-radius: 4px;
+}
+
+input:focus {
+    border-color: var(--stark-blue);
+    outline: none;
+    box-shadow: 0 0 10px var(--stark-blue);
+}
+
+/* 1. HIDE NATIVE INPUT */
+.radio-group input[type="radio"],
+.checkbox-grid input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* FIX: RADIO BUTTON HIGHLIGHT */
+.radio-group {
+    display: flex;
+    flex-direction: row;
+    gap: 25px; /* Space between Yes and No */
+    padding: 15px;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    align-items: center;
+}
+
+/* HORIZONTAL CHECKBOXES */
+.checkbox-grid {
+    display: flex;
+    flex-wrap: wrap; /* Allows them to wrap to a new line if the screen is small */
+    flex-direction: row;
+    gap: 20px;
+    padding: 10px 0;
+}
+
+/* CONTAINER ADJUSTMENTS */
+.radio-group, .checkbox-grid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 15px; /* Reduced gap for a tighter, professional look */
+    padding: 10px;
+    align-items: center;
+}
+
+/* HIDE THE UGLY NATIVE INPUTS */
+.radio-group input[type="radio"],
+.checkbox-grid input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* 1. NATIVE INPUT (Hidden but functional) */
+.radio-group input[type="radio"],
+.checkbox-grid input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* 2. THE OUTER CIRCLE/BOX */
+.radio-group label, .checkbox-grid label {
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    color: var(--stark-blue);
+    min-height: 25px;
+}
+
+.radio-group label::before,
+.checkbox-grid label::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--stark-blue);
+    background: rgba(0, 212, 255, 0.05);
+    transition: all 0.2s ease;
+}
+
+.radio-group label::before { border-radius: 50%; }
+.checkbox-grid label::before { border-radius: 4px; }
+
+/* 3. THE SELECTION "INNER CORE" (The visible click) */
+.radio-group input:checked ~ label::after,
+.checkbox-grid input:checked ~ label::after {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    background: var(--stark-blue);
+    box-shadow: 0 0 10px var(--stark-blue);
+    transition: all 0.2s ease;
+}
+
+.radio-group input:checked ~ label::after { border-radius: 50%; }
+.checkbox-grid input:checked ~ label::after { border-radius: 2px; }
+
+/* 4. ACTIVE GLOW FOR OUTER RING */
+.radio-group input:checked ~ label::before,
+.checkbox-grid input:checked ~ label::before {
+    border-color: #fff;
+    box-shadow: 0 0 15px var(--stark-blue);
+}
+
+/* HOVER FEEDBACK */
+.radio-group label:hover:before,
+.checkbox-grid label:hover:before {
+    border-color: var(--thor-gold);
+    box-shadow: 0 0 8px var(--thor-gold);
+}
+
+.radio-group.error-highlight {
+    border-color: var(--spidey-red) !important;
+    background: rgba(230, 36, 41, 0.15) !important;
+    box-shadow: 0 0 15px var(--spidey-red) !important;
+}
+
+/* HOVER EFFECT */
+.radio-group label:hover, .checkbox-grid label:hover {
+    color: var(--thor-gold);
+    text-shadow: 0 0 8px var(--thor-gold);
+}
+
+/* FIX: TEXT FIELD HIGHLIGHT */
+.error-highlight:not(.radio-group) {
+    border: 2px solid var(--spidey-red) !important;
+    background: rgba(230, 36, 41, 0.1) !important;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 18px;
+    background: var(--spidey-red);
+    border: none;
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+    border-radius: 5px;
+}
+
+button[type="submit"]:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 15px var(--spidey-red);
+}
+
+/* CONFIRMATION PAGE */
+#confirmation-page {
+    border: 2px solid var(--thor-gold);
+    text-align: center;
+    animation: fadeIn 1s ease;
+}
+
+.id-card h1 { color: var(--thor-gold); font-family: 'Orbitron'; }
+
+.summary-box {
+    background: rgba(46, 204, 113, 0.1);
+    border-left: 5px solid var(--hulk-green);
+    padding: 20px;
+    text-align: left;
+    margin: 20px 0;
+}
+
+.summary-box p { margin: 10px 0; font-size: 1.1rem; }
+
+.venue-ref {
+    margin-top: 25px;
+    padding: 15px;
+    border: 1px dashed var(--stark-blue);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.blink { animation: blinker 1.5s linear infinite; }
+@keyframes blinker { 50% { opacity: 0.3; } }

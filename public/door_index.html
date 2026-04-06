@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avengers Initiative: RSVP</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div id="blast-door-left" class="door">
+        <div class="hero-stencil cap-america"></div>
+    </div>
+    <div id="blast-door-right" class="door">
+        <div class="hero-stencil iron-man"></div>
+        <div class="lock-mechanism">
+            <div class="arc-reactor"></div>
+            <button id="access-btn">INITIATE SEQUENCE</button>
+            <p>AVENGERS ASSEMBLE</p>
+        </div>
+    </div>
+
+    <div id="main-content">
+        <header id="venue-hero">
+            <div class="hero-overlay">
+                <div class="hero-icons">
+                    <span>🛡️</span><span>🔨</span><span>🕷️</span><span>🧪</span>
+                </div>
+                <h1>MISSION BRIEFING</h1>
+                <div class="venue-card">
+                    <h2>LOCATION: THE AVENGERS TOWER</h2>
+                    <p><strong>ADDRESS:</strong> 82 Valentino Dr, Old Bridge, NJ 08857</p>
+                    <p><strong>DATE:</strong> April, 26th</p>
+                    <p><strong>TIME:</strong> 11:30 AM - 2:00 PM</p>
+                    <p><strong>INTEL:</strong> Dress as your favorite hero!</p>
+                </div>
+		<div class="scroll-hint"><em>↓↓ Proceed to Authorization Below ↓↓</em></div>
+            </div>
+        </header>
+
+        <section id="rsvp-section" class="container">
+            <div class="form-header">
+                <h2>IDENTIFICATION PROTOCOL</h2>
+            </div>
+            <form id="rsvpForm" novalidate>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>GUEST CODENAME*</label>
+                        <input type="text" id="guestName" required placeholder="Full Name">
+                    </div>
+                    <div class="form-group">
+                        <label>PARENT/GUARDIAN</label>
+                        <input type="text" id="parentName" placeholder="If applicable">
+                    </div>
+                    <div class="form-group">
+                        <label>COMM CHANNEL (EMAIL)*</label>
+                        <input type="email" id="email" required placeholder="stark@avengers.com">
+                    </div>
+                    <div class="form-group">
+                        <label>SECURE LINE (PHONE)*</label>
+                        <input type="tel" id="phone" required placeholder="555-0199">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>ATTENDING MISSION?*</label>
+                    <div class="radio-group">
+			<input type="radio" name="attending" value="Yes" required>
+			<label for="yes">ASSEMBLE</label>
+			<input type="radio" name="attending" value="No">
+			<label for="no">RETIRED</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>SQUAD SIZE (TOTAL GUESTS)*</label>
+                    <input type="number" id="guests" min="1" value="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label>DIETARY RESTRICTIONS / ALLERGIES</label>
+                    <div class="checkbox-grid">
+			<input type="checkbox" name="allergies" value="none">
+			<label for="none">NONE</label>
+			<input type="checkbox" name="allergies" value="peanuts">
+			<label for="peanuts">PEANUTS</label>
+			<input type="checkbox" name="allergies" value="dairy">
+			<label for="dairy">DAIRY</label>
+			<input type="checkbox" name="allergies" value="gluten">
+			<label for="gluten">GLUTEN</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>ADDITIONAL INTEL (COMMENTS)</label>
+                    <textarea id="comments" rows="3"></textarea>
+                </div>
+
+                <button type="submit" id="submitBtn">ENCRYPT & SEND</button>
+            </form>
+        </section>
+
+        <section id="confirmation-page" class="container" style="display:none;">
+            <div class="id-card">
+                <h1>ACCESS GRANTED</h1>
+                <div class="summary-box">
+                    <p><strong>AGENT:</strong> <span id="sum-name"></span></p>
+                    <p><strong>STATUS:</strong> <span id="sum-status"></span></p>
+                    <p><strong>SQUAD:</strong> <span id="sum-guests"></span> GUESTS</p>
+                </div>
+                <hr>
+                <div class="venue-ref">
+                    <h3>📍 MISSION COORDINATES</h3>
+                    <p>82 Valentino Dr, Old Bridge, NJ 08857 @ 11:30 AM</p>
+                    <p><em>"I can do this all day!"</em></p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

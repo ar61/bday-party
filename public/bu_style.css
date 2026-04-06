@@ -1,0 +1,115 @@
+:root {
+    --stark-blue: #00d4ff;
+    --cap-blue: #0047ab;
+    --hulk-green: #2ecc71;
+    --spidey-red: #e62429;
+    --thor-gold: #ffcc00;
+    --dark-void: #050a14;
+}
+
+body {
+    background: var(--dark-void);
+    color: #fff;
+    font-family: 'Rajdhani', sans-serif;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+/* DOOR ANIMATION - SLOWER */
+.door {
+    position: fixed;
+    top: 0;
+    width: 50%;
+    height: 100vh;
+    background: #111;
+    z-index: 1000;
+    transition: transform 2.5s cubic-bezier(0.4, 0, 0.2, 1); /* Slower opening */
+    border: 1px solid #333;
+}
+#blast-door-left { left: 0; border-right: 4px solid var(--cap-blue); }
+#blast-door-right { right: 0; border-left: 4px solid var(--spidey-red); }
+
+.open-left { transform: translateX(-100%); }
+.open-right { transform: translateX(100%); }
+
+/* HERO ELEMENTS */
+.arc-reactor {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 3px solid var(--stark-blue);
+    box-shadow: 0 0 20px var(--stark-blue);
+    margin: 0 auto 20px;
+}
+
+/* Hero & Venue Section */
+#venue-hero {
+    height: 100vh;
+    background: url('https://images.unsplash.com/photo-1514525253361-bee8a4874a73?auto=format&fit=crop&q=80') no-repeat center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-overlay {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    border: 1px solid var(--stark-blue);
+}
+
+/* FORM STYLING */
+.container {
+    background: rgba(10, 25, 47, 0.9);
+    border: 1px solid var(--stark-blue);
+    box-shadow: 0 0 40px rgba(0, 212, 255, 0.2);
+    padding: 30px;
+    max-width: 700px;
+    margin: 40px auto;
+}
+
+input, textarea {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid #444;
+    color: white;
+    padding: 10px;
+    width: 100%;
+}
+
+.error-highlight {
+    border: 2px solid var(--spidey-red) !important;
+    box-shadow: 0 0 10px var(--spidey-red);
+}
+
+button {
+    background: linear-gradient(45deg, var(--cap-blue), var(--spidey-red));
+    font-family: 'Orbitron';
+    color: white;
+    border: none;
+    padding: 15px;
+    cursor: pointer;
+    width: 100%;
+}
+
+/* CONFIRMATION */
+#confirmation-page {
+    border: 2px solid var(--thor-gold);
+    text-align: center;
+}
+.summary-box { border-left: 5px solid var(--hulk-green); padding: 10px; text-align: left; background: rgba(46, 204, 113, 0.1); }
+
+/* This MUST be at the bottom of your style.css to override other styles */
+.radio-group {
+    padding: 10px;
+    border: 2px solid transparent; /* Reserve space so the layout doesn't jump */
+    transition: all 0.3s ease;
+    display: block;
+}
+
+.radio-group.error-highlight {
+    border: 2px solid #ff0000 !important;
+    background: rgba(255, 0, 0, 0.15) !important;
+    box-shadow: 0 0 15px #ff0000 !important;
+    border-radius: 8px;
+}

@@ -1,0 +1,96 @@
+:root {
+    --stark-blue: #00d4ff;
+    --stark-red: #e62429;
+    --dark-bg: #050a14;
+    --panel-bg: rgba(10, 25, 47, 0.85);
+}
+
+body {
+    margin: 0;
+    background: var(--dark-bg);
+    color: white;
+    font-family: 'Rajdhani', sans-serif;
+    overflow-x: hidden;
+}
+
+/* Blast Door Logic */
+.door {
+    position: fixed;
+    top: 0;
+    width: 50%;
+    height: 100vh;
+    background: #1a1a1a;
+    z-index: 1000;
+    transition: transform 1.2s cubic-bezier(0.7, 0, 0.3, 1);
+    border: 2px solid #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#blast-door-left { left: 0; border-right: 5px solid var(--stark-blue); }
+#blast-door-right { right: 0; border-left: 5px solid var(--stark-blue); }
+
+.open-left { transform: translateX(-100%); }
+.open-right { transform: translateX(100%); }
+
+#access-btn {
+    padding: 15px 30px;
+    background: transparent;
+    border: 2px solid var(--stark-blue);
+    color: var(--stark-blue);
+    font-family: 'Orbitron', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 0 15px var(--stark-blue);
+}
+
+/* Hero & Venue Section */
+#venue-hero {
+    height: 100vh;
+    background: url('https://images.unsplash.com/photo-1514525253361-bee8a4874a73?auto=format&fit=crop&q=80') no-repeat center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-overlay {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    border: 1px solid var(--stark-blue);
+}
+
+/* Modern Form */
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 40px;
+    background: var(--panel-bg);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+}
+
+input {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid #333;
+    padding: 12px;
+    color: white;
+    font-size: 1.1rem;
+}
+
+.error-highlight {
+    border-color: var(--stark-red) !important;
+    box-shadow: 0 0 10px var(--stark-red);
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 15px;
+    background: var(--stark-red);
+    border: none;
+    color: white;
+    font-family: 'Orbitron';
+    cursor: pointer;
+}

@@ -569,17 +569,17 @@
             <textarea id="comments" name="comments" placeholder="Any special requests or questions?" rows="4"></textarea>
         </div>
 
+        <!-- Success Message -->
+        <div class="success-message" id="successMessage">
+            <h3>⚡ RSVP LOCKED IN! ⚡</h3>
+            <p>Thanks for your response. See you at the superhero party! 🦸‍♂️</p>
+        </div>
         <!-- Buttons -->
         <div class="button-group">
             <button type="submit" class="btn-submit">🎉 Submit RSVP</button>
             <button type="reset" class="btn-reset">Clear Form</button>
         </div>
 
-        <!-- Success Message -->
-        <div class="success-message" id="successMessage">
-            <h3>⚡ RSVP LOCKED IN! ⚡</h3>
-            <p>Thanks for your response. See you at the superhero party! 🦸‍♂️</p>
-        </div>
     </form>
 
     <!-- RSVP List -->
@@ -692,9 +692,9 @@
 		successMessage.classList.add('show');
 		document.getElementById('rsvpForm').reset();
 
-		setTimeout(() => {
-		    successMessage.classList.remove('show');
-		}, 3000);
+		//setTimeout(() => {
+		//    successMessage.classList.remove('show');
+		//}, 3000);
 
 		// Optional: Keep localStorage as a local backup/cache
 		let localRsvps = JSON.parse(localStorage.getItem('rsvps')) || [];

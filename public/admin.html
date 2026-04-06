@@ -472,7 +472,7 @@
                     </span>
                 </td>
                 <td>${rsvp.guests}</td>
-                <td>${rsvp.allergies && rsvp.allergies.length > 0 ? rsvp.allergies.join(', ') : '-'}</td>
+                <td>${rsvp.allergies && rsvp.allergies.length > 0 ? rsvp.allergies : '-'}</td>
                 <td>${rsvp.comments ? rsvp.comments.substring(0, 30) + '...' : '-'}</td>
                 <td style="font-size: 12px;">${new Date(rsvp.submittedAt).toLocaleDateString()}</td>
                 <td><button class="btn btn-danger" onclick="deleteRsvp(${rsvp.id})">Delete</button></td>

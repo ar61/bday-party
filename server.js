@@ -12,6 +12,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
+express.static.mime.define({'image/avif': ['avif']});
 
 // In-memory storage
 let rsvps = [];
@@ -44,13 +45,17 @@ const initDb = async () => {
 initDb().catch(console.error);
 
 // Route for the landing page
-app.get('/', (req, res) => {
+app.get('/iplay', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Route for the admin dashboard
 app.get('/admin', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
+app.get('/82', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'door_index.html'));
 });
 
 // ============================================
@@ -76,16 +81,12 @@ app.post('/api/rsvp', async (req, res) => {
   try {
        	const result = await pool.query(
            `INSERT INTO rsvps (guest_name, parent_name, email, phone, attending, guests, allergies, comments)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+	    RETURNING *`,
            [guestName, parentName, email, phone, attending, guests, allergies, comments]
        	);
-	// res.status(201).json({ message: "RSVP saved to database!" });
-	console.log("Inserted row:", result.rows[0]);
-	res.status(201).json(result.rows[0]);
-   } catch (err) {
-       	console.error("Insert Error:", err);
-       	res.status(500).send("Failed to save RSVP");
-   }
+	const savedRow = result.rows[0];
+	console.log("Inserted row:", savedRow);
 
         /*const rsvpData = {
             id: Date.now(),
@@ -101,7 +102,7 @@ app.post('/api/rsvp', async (req, res) => {
         };
 
         rsvps.push(rsvpData);*/
-    try {
+
         // Send confirmation email to guest
         if (email) {
             try {
@@ -118,7 +119,15 @@ app.post('/api/rsvp', async (req, res) => {
                             <li><strong>Attending:</strong> ${attending}</li>
                             <li><strong>Number of Guests:</strong> ${guests}</li>
                         </ul>
-                        <p>We can't wait to celebrate with you! 🦸‍♂️</p>`
+                        <p>We can't wait to celebrate with you! 🦸‍♂️</p>
+			<p>Date, Time: 25th April 2026, 12:15PM to 3:00PM</p>
+			<p>Venue: iPlay America, 110 Schanck Rd, Freehold, NJ 07728-2938</p>
+			<div>
+			    Regards from Nirvan's Parents: 
+			    <p><em>Abhinav & Nikitha!</em></p> 
+			    <p><em>phone: 2134466856</em></p>
+			    <p><em>email: rathod.abhinav@gmail.com</em></p>
+			</div>`
                 });
             } catch (emailErr) {
                 console.error('Guest email failed:', emailErr.message);
@@ -147,10 +156,14 @@ app.post('/api/rsvp', async (req, res) => {
                 console.error('Admin email failed:', emailErr.message);
             }
         }
-
-        res.json({ success: true, message: 'RSVP received successfully!', id: newId });
+	// This sends the ACTUAL data back so the confirmation page can see it
+	return res.status(201).json({
+	    success: true,
+	    ...savedRow // Spreads all DB columns (guest_name, attending, etc.) into the response
+	});
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        console.error('Something went wrong: ', error.stack);
+	//res.status(500).json({ success: false, error: error.message });
     }
 });
 
