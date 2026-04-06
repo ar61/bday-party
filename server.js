@@ -120,14 +120,16 @@ app.post('/api/rsvp', async (req, res) => {
                             <li><strong>Number of Guests:</strong> ${guests}</li>
                         </ul>
                         <p>We can't wait to celebrate with you! 🦸‍♂️</p>
-			<p>Date, Time: 25th April 2026, 12:15PM to 3:00PM</p>
-			<p>Venue: iPlay America, 110 Schanck Rd, Freehold, NJ 07728-2938</p>
-			<div>
-			    Regards from Nirvan's Parents: 
-			    <p><em>Abhinav & Nikitha!</em></p> 
-			    <p><em>phone: 2134466856</em></p>
-			    <p><em>email: rathod.abhinav@gmail.com</em></p>
-			</div>`
+			<p><strong>DATE & TIME:</strong> 25th April 2026 | 12:15PM - 3:00PM</p>
+		    	<p><strong>HQ (VENUE):</strong> iPlay America, 110 Schanck Rd, Freehold, NJ 07728</p>
+		    
+		    	<div>
+			    <hr>
+			    <p><em>Regards from the Party Organizers:</em></p>
+			    <p><strong>Primary Contact:</strong>Abhinav Rathod</p>
+			    <p><strong>Secure Line:</strong> 213-446-6856</p>
+			    <p><strong>Comms:</strong> rathod.abhinav@gmail.com</p>
+		        </div>`
                 });
             } catch (emailErr) {
                 console.error('Guest email failed:', emailErr.message);
