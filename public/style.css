@@ -174,8 +174,8 @@ input:focus {
 }
 
 /* 1. NATIVE INPUT (Hidden but functional) */
-.radio-group input[type="radio"],
-.checkbox-grid input[type="checkbox"] {
+.radio-group input,
+.checkbox-grid input {
     position: absolute;
     opacity: 0;
     cursor: pointer;
@@ -184,12 +184,13 @@ input:focus {
 /* 2. THE OUTER CIRCLE/BOX */
 .radio-group label, .checkbox-grid label {
     position: relative;
-    padding-left: 35px;
+    padding-left: 30px;
+    margin-right: 15px;
     cursor: pointer;
-    display: inline-flex;
-    align-items: center;
     color: var(--stark-blue);
-    min-height: 25px;
+    font-weight: bold;
+    display: inline-block;
+    line-height: 20px;
 }
 
 .radio-group label::before,
@@ -197,39 +198,40 @@ input:focus {
     content: "";
     position: absolute;
     left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 20px;
-    height: 20px;
+    top: 0;
+    width: 18px;
+    height: 18px;
     border: 2px solid var(--stark-blue);
     background: rgba(0, 212, 255, 0.05);
     transition: all 0.2s ease;
 }
 
 .radio-group label::before { border-radius: 50%; }
-.checkbox-grid label::before { border-radius: 4px; }
+.checkbox-grid label::before { border-radius: 3px; }
 
-/* 3. THE SELECTION "INNER CORE" (The visible click) */
-.radio-group input:checked ~ label::after,
-.checkbox-grid input:checked ~ label::after {
+/* 4. THE INNER CORE (Invisible until clicked) */
+.radio-group label::after, .checkbox-grid label::after {
     content: "";
     position: absolute;
-    left: 6px;
-    top: 50%;
-    transform: translateY(-50%);
+    left: 5px;
+    top: 5px;
     width: 12px;
     height: 12px;
     background: var(--stark-blue);
     box-shadow: 0 0 10px var(--stark-blue);
-    transition: all 0.2s ease;
+    opacity: 0; /* Hidden by default */
+    transform: scale(0);
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.radio-group label::after { border-radius: 50%; }
+
+/* 5. THE MAGIC SELECTOR: SHOW CORE ON CHECK */
+input:checked + label::after {
+    opacity: 1;
+    transform: scale(1);
 }
 
-.radio-group input:checked ~ label::after { border-radius: 50%; }
-.checkbox-grid input:checked ~ label::after { border-radius: 2px; }
-
-/* 4. ACTIVE GLOW FOR OUTER RING */
-.radio-group input:checked ~ label::before,
-.checkbox-grid input:checked ~ label::before {
+input:checked + label::before {
     border-color: #fff;
     box-shadow: 0 0 15px var(--stark-blue);
 }

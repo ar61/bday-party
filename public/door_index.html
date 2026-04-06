@@ -66,10 +66,11 @@
                 <div class="form-group">
                     <label>ATTENDING MISSION?*</label>
                     <div class="radio-group">
-			<input type="radio" name="attending" value="Yes" required>
-			<label for="yes">ASSEMBLE</label>
-			<input type="radio" name="attending" value="No">
-			<label for="no">RETIRED</label>
+			<input type="radio" name="attending" value="Yes" id="status-yes" required>
+			<label for="status-yes">ASSEMBLE</label>
+
+			<input type="radio" name="attending" value="No" id="status-no">
+			<label for="status-no">RETIRED</label>
                     </div>
                 </div>
 
@@ -81,14 +82,14 @@
                 <div class="form-group">
                     <label>DIETARY RESTRICTIONS / ALLERGIES</label>
                     <div class="checkbox-grid">
-			<input type="checkbox" name="allergies" value="none">
-			<label for="none">NONE</label>
-			<input type="checkbox" name="allergies" value="peanuts">
-			<label for="peanuts">PEANUTS</label>
-			<input type="checkbox" name="allergies" value="dairy">
-			<label for="dairy">DAIRY</label>
-			<input type="checkbox" name="allergies" value="gluten">
-			<label for="gluten">GLUTEN</label>
+			<input type="checkbox" name="allergies" value="none" id="allergy-none">
+			<label for="allergy-none">NONE</label>
+			<input type="checkbox" name="allergies" value="peanuts" id="allergy-peanuts">
+			<label for="allergy-peanuts">PEANUTS</label>
+			<input type="checkbox" name="allergies" value="dairy" id="allergy-dairy">
+			<label for="allergy-dairy">DAIRY</label>
+			<input type="checkbox" name="allergies" value="gluten" id="allergy-gluten">
+			<label for="allergy-gluten">GLUTEN</label>
                     </div>
                 </div>
 
