@@ -75,7 +75,7 @@ const transporter = nodemailer.createTransport({
 
 
 app.post('/api/rsvp82', async (req, res) => {
-  console.log("Body received:", req.body); // DEBUG: Check if this is {}
+  console.log("Body received in 82:", req.body); // DEBUG: Check if this is {}
   const { guestName, parentName, email, phone, attending, guests, allergies, comments } = req.body;
 
   try {
@@ -86,8 +86,64 @@ app.post('/api/rsvp82', async (req, res) => {
            [guestName, parentName, email, phone, attending, guests, allergies, comments]
        	);
     const savedRow = result.rows[0];
-    console.log("Inserted row:", savedRow);
+    console.log("Inserted row in 82:", savedRow);
 
+    
+    // Send confirmation email to guest
+    if (email) {
+        try {
+        await transporter.sendMail({
+            from: process.env.GMAIL_USER,
+            to: email,
+            subject: '🦸 RSVP Confirmed - Superhero Kids Only Birthday Party!',
+            html: `
+            <h2>Your RSVP is Confirmed!</h2>
+            <p>Hi ${parentName || 'Parent'},</p>
+            <p>Thank you for your RSVP! We've received your response:</p>
+            <ul>
+                <li><strong>Child's Name:</strong> ${guestName}</li>
+                <li><strong>Attending:</strong> ${attending}</li>
+                <li><strong>Number of Guests:</strong> ${guests}</li>
+            </ul>
+            <p> We can't wait to celebrate with you! 🦸‍♂️</p>
+            <p><strong>DATE & TIME:</strong> 26th April 2026 | 11:30AM - 2:00PM</p>
+            <p><strong>HQ (VENUE):</strong> 82 Valentino Dr, Old Bridge, NJ 08857</p>
+            
+            <div>
+                <hr>
+                <p><em>Regards from the Party Organizers:</em></p>
+                <p><strong>Primary Contact:</strong> Abhinav Rathod</p>
+                <p><strong>Secure Line:</strong> 213-446-6856</p>
+                <p><strong>Comms:</strong> rathod.abhinav@gmail.com</p>
+            </div>`
+        });
+        } catch (emailErr) {
+        console.error('Guest email failed:', emailErr.message);
+        }
+    }
+
+    // Send notification email to admin
+    if (process.env.ADMIN_EMAIL) {
+        try {
+            await transporter.sendMail({
+                from: process.env.GMAIL_USER,
+                to: process.env.ADMIN_EMAIL,
+                subject: `📋 New RSVP: ${guestName} - ${attending}`,
+                html: `
+                <h2>New RSVP Submission</h2>
+                <ul>
+                    <li><strong>Child:</strong> ${guestName}</li>
+                    <li><strong>Parent:</strong> ${parentName}</li>
+                    <li><strong>Email:</strong> ${email}</li>
+                    <li><strong>Attending:</strong> ${attending}</li>
+                    <li><strong>Guests:</strong> ${guests}</li>
+                    <li><strong>Allergies:</strong> ${allergies}</li>
+                </ul>`
+            });
+        } catch (err) {
+            console.error("Error sending email to admin email: ", process.env.ADMIN_EMAIL);
+        }
+    }
     // This sends the ACTUAL data back so the confirmation page can see it
     return res.status(201).json({
 	    success: true,

@@ -61,6 +61,7 @@ document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
             body: JSON.stringify(formData)
         });
 
+        console.log("received response: ", response);
         if (response.ok) {
             const result = await response.json();
             console.log("Server response:", result);
@@ -84,62 +85,9 @@ document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
             document.getElementById('confirmation-page').style.display = 'block';
             window.scrollTo(0, 0);
         
-            const email = document.getElementById('email').value;
-            // Send confirmation email to guest
-            if (email) {
-                try {
-                await transporter.sendMail({
-                    from: process.env.GMAIL_USER,
-                    to: email,
-                    subject: '🦸 RSVP Confirmed - Superhero Kids Only Birthday Party!',
-                    html: `
-                    <h2>Your RSVP is Confirmed!</h2>
-                    <p>Hi ${parentName || 'Parent'},</p>
-                    <p>Thank you for your RSVP! We've received your response:</p>
-                    <ul>
-                        <li><strong>Child's Name:</strong> ${formData.guestName}</li>
-                        <li><strong>Attending:</strong> ${formData.attending}</li>
-                        <li><strong>Number of Guests:</strong> ${formData.guests}</li>
-                    </ul>
-                    <p> We can't wait to celebrate with you! 🦸‍♂️</p>
-                    <p><strong>DATE & TIME:</strong> 26th April 2026 | 11:30AM - 2:00PM</p>
-                    <p><strong>HQ (VENUE):</strong> 82 Valentino Dr, Old Bridge, NJ 08857</p>
-                    
-                    <div>
-                        <hr>
-                        <p><em>Regards from the Party Organizers:</em></p>
-                        <p><strong>Primary Contact:</strong> Abhinav Rathod</p>
-                        <p><strong>Secure Line:</strong> 213-446-6856</p>
-                        <p><strong>Comms:</strong> rathod.abhinav@gmail.com</p>
-                    </div>`
-                });
-                } catch (emailErr) {
-                console.error('Guest email failed:', emailErr.message);
-                }
-            }
-
-            // Send notification email to admin
-            if (process.env.ADMIN_EMAIL) {
-                try {
-                    await transporter.sendMail({
-                        from: process.env.GMAIL_USER,
-                        to: process.env.ADMIN_EMAIL,
-                        subject: `📋 New RSVP: ${formData.guestName} - ${formData.attending}`,
-                        html: `
-                        <h2>New RSVP Submission</h2>
-                        <ul>
-                            <li><strong>Child:</strong> ${formData.guestName}</li>
-                            <li><strong>Parent:</strong> ${formData.parentName}</li>
-                            <li><strong>Email:</strong> ${formData.email}</li>
-                            <li><strong>Attending:</strong> ${formData.attending}</li>
-                            <li><strong>Guests:</strong> ${formData.guests}</li>
-                            <li><strong>Allergies:</strong> ${formData.allergies}</li>
-                        </ul>`
-                    });		    
-                } catch (err) {
-                    console.error("Comms failure:", err);
-                }
-            }
+            console.log("gmail user: ", process.env.GMAIL_USER);
+            console.log("admin email: ", process.env.ADMIN_EMAIL);
+            const email = response.email;
         }
     } catch (err) {
         console.error("event Handler function error:", err);
