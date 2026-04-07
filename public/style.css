@@ -89,13 +89,59 @@ body {
 
 /* CONTAINER & FORM */
 .container {
+    position: relative; /* REQUIRED for pseudo-element */
     max-width: 700px;
     margin: 40px auto;
     padding: 40px;
-    background: var(--glass-bg);
-    border: 1px solid rgba(0, 212, 255, 0.3);
-    border-radius: 10px;
+    background: var(--glass-bg); /* Use rgba background for transparency */
+    border-radius: 12px;
     backdrop-filter: blur(5px);
+    overflow: hidden; /* REQUIRED to contain the glow */
+}
+
+/* THE CHASING LIGHTS PSEUDO-ELEMENT */
+.container::before {
+    content: '';
+    position: absolute;
+    width: 200%; /* Larger than container */
+    height: 200%;
+    top: -50%;
+    left: -50%;
+    z-index: -1; /* Place behind content */
+
+    /* The "Row of Lights" Gradient (Customize colors here) */
+    background-image: conic-gradient(
+        transparent,
+        transparent,
+        var(--stark-blue), /* Starting light */
+        transparent,
+        var(--cap-blue),
+        transparent,
+        var(--stark-blue), /* Middle light */
+        transparent
+    );
+
+    animation: chasingLights 5s linear infinite;
+}
+
+/* THE MASK (Unveils only the thin border) */
+.container::after {
+    content: '';
+    position: absolute;
+    inset: 4px; /* How thick you want the border (e.g., 4px) */
+    background: var(--dark-void); /* MUST match your page background color */
+    border-radius: 9px; /* Slightly smaller than container radius */
+    z-index: -1;
+}
+
+/* THE MOVING LIGHTS ANIMATION */
+@keyframes chasingLights {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .form-group { margin-bottom: 20px; }
@@ -286,7 +332,21 @@ button[type="submit"]:hover {
     animation: fadeIn 1s ease;
 }
 
-.id-card h1 { color: var(--thor-gold); font-family: 'Orbitron'; }
+.id-card {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* Ensure the success header doesn't overflow on small screens */
+.id-card h1 { 
+    color: var(--thor-gold); 
+    font-family: 'Orbitron'; 
+    font-size: 1.5rem;
+    word-wrap: break-word;
+}
 
 .summary-box {
     background: rgba(46, 204, 113, 0.1);
@@ -311,3 +371,12 @@ button[type="submit"]:hover {
 
 .blink { animation: blinker 1.5s linear infinite; }
 @keyframes blinker { 50% { opacity: 0.3; } }
+
+/* Prevent mobile auto-zoom by ensuring 16px minimum font size */
+@media screen and (max-width: 768px) {
+    input, 
+    select, 
+    textarea {
+        font-size: 16px !important;
+    }
+}

@@ -73,6 +73,31 @@ const transporter = nodemailer.createTransport({
 // API ENDPOINTS
 // ============================================
 
+
+app.post('/api/rsvp82', async (req, res) => {
+  console.log("Body received:", req.body); // DEBUG: Check if this is {}
+  const { guestName, parentName, email, phone, attending, guests, allergies, comments } = req.body;
+
+  try {
+       	const result = await pool.query(
+           `INSERT INTO rsvps (guest_name, parent_name, email, phone, attending, guests, allergies, comments)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+	    RETURNING *`,
+           [guestName, parentName, email, phone, attending, guests, allergies, comments]
+       	);
+    const savedRow = result.rows[0];
+    console.log("Inserted row:", savedRow);
+
+    // This sends the ACTUAL data back so the confirmation page can see it
+    return res.status(201).json({
+	    success: true,
+	    ...savedRow // Spreads all DB columns (guest_name, attending, etc.) into the response
+	});
+  } catch (error) {
+      console.error('Something went wrong: ', error.stack);
+  }
+});
+
 // POST: Receive RSVP submission
 app.post('/api/rsvp', async (req, res) => {
   console.log("Body received:", req.body); // DEBUG: Check if this is {}
