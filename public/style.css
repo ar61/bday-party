@@ -170,12 +170,39 @@ input:focus {
     box-shadow: 0 0 10px var(--stark-blue);
 }
 
+/* Create a container for each individual option */
+.radio-item {
+    position: relative; /* This traps the 'absolute' input inside this box */
+    display: inline-block;
+    margin-right: 20px;
+    min-height: 44px; /* Minimum recommended touch target height */
+}
+
 /* 1. HIDE NATIVE INPUT */
-.radio-group input[type="radio"],
-.checkbox-grid input[type="checkbox"] {
+.radio-group input[type="radio"] {
     position: absolute;
+    top: 0;
+    inset: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     opacity: 0;
     cursor: pointer;
+    z-index: 10; /* Ensure it's on top of its own label */
+    -webkit-appearance: none; /* Reset mobile system styles */
+}
+
+.checkbox-grid input[type="checkbox"] {
+    position: absolute;
+    /* Stretch to cover the entire label area */
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2; /* Sit ON TOP of the label and the custom circle */
 }
 
 /* FIX: RADIO BUTTON HIGHLIGHT */
@@ -228,15 +255,24 @@ input:focus {
 }
 
 /* 2. THE OUTER CIRCLE/BOX */
-.radio-group label, .checkbox-grid label {
+.radio-group label {
     position: relative;
     padding-left: 30px;
-    margin-right: 15px;
-    cursor: pointer;
     color: var(--stark-blue);
     font-weight: bold;
+    z-index: 5;
+    pointer-events: none; /*Optional: ensures the label doesn't steal the click from the input */
+}
+.checkbox-grid label {
+    position: relative;
+    padding-left: 35px;
+    margin-right: 15px;
+    cursor: pointer;
     display: inline-block;
-    line-height: 20px;
+    line-height: 24px; /* Slightly taller for better finger-tapping */
+    color: var(--stark-blue);
+    font-weight: bold;
+    z-index: 1; /* Sit BELOW the input */
 }
 
 .radio-group label::before,
@@ -254,6 +290,15 @@ input:focus {
 
 .radio-group label::before { border-radius: 50%; }
 .checkbox-grid label::before { border-radius: 3px; }
+
+/* 3. ENSURE NO MOUSE-EVENTS ON THE DECORATION */
+/* This ensures the 'tap' passes through the circle/square to the input */
+.radio-group label::before, 
+.radio-group label::after,
+.checkbox-grid label::before,
+.checkbox-grid label::after {
+    pointer-events: none; 
+}
 
 /* 4. THE INNER CORE (Invisible until clicked) */
 .radio-group label::after, .checkbox-grid label::after {
